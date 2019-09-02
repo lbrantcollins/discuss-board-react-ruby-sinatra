@@ -2,11 +2,18 @@ require 'sinatra/base'
 
 # controllers
 require './controllers/ApplicationController'
-require './controllers/ItemController'
+require './controllers/TeacherController'
+require './controllers/ChallengeController'
+require './controllers/KeywordController'
+require './controllers/LanguageController'
+
 
 
 # models
-require './models/ItemModel'
+require './models/TeacherModel'
+require './models/ChallengeModel'
+require './models/KeywordModel'
+require './models/LanguageModel'
 
 
 # top-level routing
@@ -16,6 +23,18 @@ map ('/') {
 	run ApplicationController
 }
 
-map ('/items') {
-	run ItemController
+map ('/teachers') {
+	run TeacherController
+}
+
+map ('/challenges') {
+	run ChallengeController
+}
+
+map ('/keywords') {
+	run KeywordController
+}
+
+map ('/languages') {
+	run LanguageController
 }

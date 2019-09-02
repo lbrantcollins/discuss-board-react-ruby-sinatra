@@ -1,19 +1,17 @@
-# ALL other controllers in your app will inherit from
-# ApplicationController
 require 'json'
 
-class ItemController < ApplicationController
+class ChallengeController < ApplicationController
 
 	get '/test' do
-		"you hit the item controller"
+		"you hit the challenge controller"
 	end
 
 	# index
 
 	get '/' do
 		# get all items from DB
-		items = Item.all
-		return items.to_json
+		challenges = Challenge.all
+		return challenges.to_json
 	end
 
 	# # create

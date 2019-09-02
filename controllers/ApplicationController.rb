@@ -8,7 +8,7 @@ class ApplicationController < Sinatra::Base
 	# we will come back to this later for production/deployment environs
 	ActiveRecord::Base.establish_connection(
 		:adapter => 'postgresql',
-		:database => 'test_database'
+		:database => 'discuss'
 	)
 
 	# teach controller to find templates

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Item Index</title>
+</head>
+<body>
+
+	<h2>Item Index</h2>
+
+	<ul>
+		<% @items.each do |item| %>
+			<li> <%= item.content %> </li>
+		<% end %>
+	</ul>
+
+</body>
+</html>

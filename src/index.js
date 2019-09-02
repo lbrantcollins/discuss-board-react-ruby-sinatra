@@ -1,27 +1,66 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+require('babel-polyfill');
+require('dotenv');
 
-// style-loader npm module 
-// will inject these styles into the single page app build
-require('./index.css');  
+require('./index.css'); 
+
+const api_url = process.env.API_URL || ''; 
 
 
-
-// what is in a component?
-// state (not always)
-// lifecycle events (not always)
-// UI (always)
-
-// @babel/preset-env npm module will tranform ES6 classes 
-// to ES5 constructors for browser compatability
 class App extends Component {
+	constructor() {
+		super();
+
+		this.state = {
+			items: [],
+		}
+	}
+
+	componentDidMount = async () => {
+
+		console.log("API_URL", process.env.API_URL);
+		console.log("Inside componentDidMount()");
+
+   	try {
+
+         const allItemsResponse = await fetch(api_url + '/items')
+
+         const parsedResponse = await allItemsResponse.json();
+
+         console.log(parsedResponse);
+
+         // if (parsedResponse.status.code === 200) {
+
+            await this.setState({
+               items: parsedResponse.data,
+            })
+
+         // }
+
+      } catch (err) {
+         console.log(err)
+      }
+
+	}
 
 	render() {
 
-		// @babel/preset-react npm module will transform JSX to JS
+		const itemList = this.state.items.map( item => {
+			return <li key={item.id}> {item.content} </li>
+		})
+
+
+
 		return(
+
 			<div>
-			Hello, world! I've changed again!
+				<h3>Hello, world!</h3>
+
+				<ul>
+					{itemList}
+				</ul>
+
 			</div>
 
 		)

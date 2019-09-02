@@ -1,0 +1,308 @@
+General Assembly
+Ruben Ayres (youTube videos of live lessons)
+https://www.youtube.com/playlist?list=PLkokXO_kxA1wxo1LhipWt9abf_aqOF2zK
+
+GitHub GA Enterprise organization
+https://git.generalassemb.ly/sei-1-cc-ruby
+
+
+
+Reading:
+(1) Ruby for Beginners
+http://ruby-for-beginners.rubymonstas.org/
+
+(2) Webapps for Beginners
+http://webapps-for-beginners.rubymonstas.org/rack.html
+
+
+# Getting started with ruby/Sinatra
+
+install bundler
+
+`gem install bundler`
+
+
+## If not using controllers (just app.rb)
+
+`touch Gemfile`
+
+add these lines to Gemfile:
+
+```
+source 'https://rubygems.org'
+gem 'sinatra'
+```
+
+install the packages listed in your Gemfile
+
+`bundle install` 
+
+(the above reads Gemfile, so rerun whenver you add package to the Gemfile)
+
+Get "rack" set up ("ru" = rackup)
+
+If just using one app file (no controllers), then:
+
+Start a file for our ruby app:
+
+`touch app.rb`
+
+Add these lines to `app.rb`:
+
+```
+require 'bundler'
+Bundler.require()
+```
+
+or, equivalently (without the parentheses on the require menthod)
+
+```
+require 'bundler'
+Bundler.require
+```
+
+Start a rackup config file
+
+`touch config.ru`
+
+Add these lines to `config.ru`:
+
+```
+require './app.rb'
+run Sinatra::Application
+```
+
+To run the application:
+
+`bundle exec rackup`
+
+To get the server to restart with every file change...
+
+`gem install rerun`
+
+Now, you will start the server with:
+
+`rerun bundle exec rackup`
+
+Set up css:
+
+```
+mkdir public
+mkdir public/css
+touch public/css/style.css
+```
+
+Edit `style.css` to add some background color so you can test if working.
+
+Add this to the template (`hello.erb` file):
+
+`<link rel="stylesheet" type="text/css" href="/css/style.css">`
+
+
+## Using controllers
+
+`touch Gemfile`
+
+add these lines to Gemfile:
+
+```
+source 'https://rubygems.org'
+
+gem 'sinatra'
+gem 'pry'  	# REPL
+gem 'pg'  	# postgresql
+gem 'sinatra-activerecord'
+```
+
+install the packages listed in your Gemfile
+
+`bundle install` 
+
+(the above reads Gemfile, so rerun whenver you add package to the Gemfile)
+
+Get "rack" set up ("ru" = rackup)
+
+Start a rackup config file
+
+`touch config.ru`
+
+Put this line in `config.ru` (instead of what was used for `app.rb` setup)
+
+```
+require 'sinatra/base'
+```
+
+Get controller setup
+
+```
+mkdir controllers
+touch controllers/ApplicationController.rb
+```
+
+In `ApplicationController.rb`, extend the sinatra-base module as follows:
+
+```
+class ApplicationController < Sinatra::Base
+	require 'bundler'
+	Bundler.require()
+
+	get '/' do
+		"Welcome to your first Sinatra MVC App"
+		
+	end
+
+end
+```
+
+Go back to `config.ru` and require controllers
+
+```
+require './controllers/ApplicationController'
+```
+
+and specify the controller for the main route ('/'):
+
+```
+map ('/') {
+	run ApplicationController
+}
+```
+
+Now, let's make a template...
+
+```
+mkdir views
+touch views/hello.erb
+```
+
+Show controller where to find views (`ApplicationController.rb`):
+
+```
+set :views, File.expand_path('../../views', __FILE__)
+```
+
+Show controller where to find static assets (`ApplicationController.rb`)
+
+```
+set :public_dir, File.expand_path('../../public', __FILE__)
+```
+
+Set up for database:
+
+```
+mkdir db
+touch db/migrations.sql
+```
+
+Get started creating and connecting to a DB in `migrations.sql`
+
+```
+DROP DATABASE IF EXISTS my_database;
+CREATE DATABASE my_database;
+
+\c my_database_name -- connect to db
+
+CREATE TABLE items(
+	id SERIAL PRIMARY KEY, -- AUTO_INCREMENT NOT NULL
+	content VARCHAR(255)
+);
+```
+
+Get some models going...
+
+```
+mkdir models
+touch models/ItemModel.rb
+```
+
+In `ItemModel.rb`
+
+```
+class Item < ActiveRecord::Base
+
+end
+```
+
+Back in `config.ru` add this (right after controllers?)
+
+```
+require './models/ItemModel'
+
+```
+
+Set up to seed database:
+
+```
+touch db/seed.sql
+```
+
+Put something like this into `seed.sql`   
+(assuming you have a table called "items" with a field "contents")
+
+```
+INSERT INTO items (content) VALUES ('here''s the first item');
+INSERT INTO items (content) VALUES ('here''s the second item');
+INSERT INTO items (content) VALUES ('here''s the third item');
+INSERT INTO items (content) VALUES ('here''s the fourth item');
+INSERT INTO items (content) VALUES ('here''s the fifth item');
+INSERT INTO items (content) VALUES ('here''s the sixth item');
+```
+
+Add a controller for items in the DB
+
+```
+touch controllers/ItemController.rb
+```
+
+Add the controller to `config.ru`
+
+```
+require './controllers/ItemController'
+```
+
+and add the base url for the ItemController to `config.ru`
+
+```
+map ('/items') {
+	run ItemController
+}
+```
+
+`ItemController.rb` should start out looking like this:
+
+```
+class ItemController < ApplicationController
+
+	get '/test' do
+		"you hit the item controller"
+	end
+
+end
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

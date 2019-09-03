@@ -14,6 +14,13 @@ class ChallengeController < ApplicationController
 		return challenges.to_json
 	end
 
+	get '/:id' do
+		challenge = Challenge.find params[:id]
+		# keywords = Keyword.find challenge_id == params[:id]
+		return challenge.to_json
+	end
+
+
 	# # create
 	# post '/' do
 	# 	new_item = Item.new

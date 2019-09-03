@@ -17,6 +17,9 @@ class ApplicationController < Sinatra::Base
 	# teach controller to find static assets
 	set :public_dir, File.expand_path('../../public', __FILE__)
 
+	# I shouldn't need method override since using fetch in React
+	# use Rack::MethodOverride # use Rack middleware
+	# set :method_override, true # turn on method override for Sinatra
 
 	get '/' do
 		"<h1>Welcome to your first Sinatra MVC App.</h1>"

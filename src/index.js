@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-require('babel-polyfill');
-require('dotenv');
+require('babel-polyfill'); // allows async/await
+require('dotenv'); // allows .env for environment vars
 
 require('./index.css'); 
 
-const api_url = process.env.API_URL || ''; 
+// use the API url from environment if it exists
+const API_URL = process.env.REACT_APP_API_URL || ''; 
 
 
 class App extends Component {
@@ -13,30 +14,30 @@ class App extends Component {
 		super();
 
 		this.state = {
-			items: [],
+			keywordIds: [],
 		}
 	}
 
 	componentDidMount = async () => {
 
-		console.log("API_URL", process.env.API_URL);
+		console.log("REACT_APP_API_URL", process.env.REACT_APP_API_URL);
 		console.log("Inside componentDidMount()");
 
    	try {
 
-         const allItemsResponse = await fetch(api_url + '/items')
+         const allKeywordIdsResponse = await fetch(API_URL + '/keywords/3')
 
-         const parsedResponse = await allItemsResponse.json();
+         const parsedResponse = await allKeywordIdsResponse.json();
 
          console.log(parsedResponse);
 
-         // if (parsedResponse.status.code === 200) {
+         if (parsedResponse.status.code === 200) {
 
             await this.setState({
-               items: parsedResponse.data,
+               keywordIds: parsedResponse.data,
             })
 
-         // }
+         }
 
       } catch (err) {
          console.log(err)
@@ -46,11 +47,9 @@ class App extends Component {
 
 	render() {
 
-		const itemList = this.state.items.map( item => {
-			return <li key={item.id}> {item.content} </li>
+		const keywordIdList = this.state.keywordIds.map( keywordId => {
+			return <li key={keywordId.id}> {keywordId.keyword_id} </li>
 		})
-
-
 
 		return(
 
@@ -58,7 +57,7 @@ class App extends Component {
 				<h3>Hello, world!</h3>
 
 				<ul>
-					{itemList}
+					{keywordIdList}
 				</ul>
 
 			</div>

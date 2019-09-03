@@ -24,30 +24,30 @@ CREATE TABLE challenges (
 	FOREIGN KEY (teacher_id) REFERENCES teachers(id)
 );
 
-CREATE TABLE keyword_choices (
+CREATE TABLE keywords (
 	id SERIAL PRIMARY KEY,
 	keyword VARCHAR(30)
 );
 
-CREATE TABLE keywords (
+CREATE TABLE challenge_keywords (
 	id SERIAL PRIMARY KEY,
 	challenge_id INT,
 	keyword_id INT,
 	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
-	FOREIGN KEY (keyword_id) REFERENCES keyword_choices(id)
-);
-
-CREATE TABLE language_choices (
-	id SERIAL PRIMARY KEY,
-	language VARCHAR(30)
+	FOREIGN KEY (keyword_id) REFERENCES keywords(id)
 );
 
 CREATE TABLE languages (
 	id SERIAL PRIMARY KEY,
+	language VARCHAR(30)
+);
+
+CREATE TABLE challenge_languages (
+	id SERIAL PRIMARY KEY,
 	challenge_id INT,
 	language_id INT,
 	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
-	FOREIGN KEY (language_id) REFERENCES language_choices(id)
+	FOREIGN KEY (language_id) REFERENCES languages(id)
 );
 
 

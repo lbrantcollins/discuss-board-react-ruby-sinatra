@@ -5,7 +5,9 @@ require './controllers/ApplicationController'
 require './controllers/TeacherController'
 require './controllers/ChallengeController'
 require './controllers/KeywordController'
+require './controllers/ChallengeKeywordController'
 require './controllers/LanguageController'
+require './controllers/ChallengeLanguageController'
 
 
 
@@ -13,7 +15,9 @@ require './controllers/LanguageController'
 require './models/TeacherModel'
 require './models/ChallengeModel'
 require './models/KeywordModel'
+require './models/ChallengeKeywordModel'
 require './models/LanguageModel'
+require './models/ChallengeLanguageModel'
 
 
 # top-level routing
@@ -35,6 +39,14 @@ map ('/keywords') {
 	run KeywordController
 }
 
+map ('/challenge_keywords') {
+	run ChallengeKeywordController
+}
+
 map ('/languages') {
 	run LanguageController
+}
+
+map ('/challenge_languages') {
+	run ChallengeLanguageController
 }

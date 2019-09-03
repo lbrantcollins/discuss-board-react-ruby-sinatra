@@ -2,16 +2,16 @@ require 'json'
 
 # languages associated with a specific challenge
 
-class LanguageController < ApplicationController
+class ChallengeLanguageController < ApplicationController
 
 	get '/' do
-		"you hit the /languages route"
+		"you hit the /challenge_languages route"
 	end
 
 	# NEW/get form to add a language to a specific challenge
 	###########
 	get '/new' do
-		"you hit the /languages/new route"
+		"you hit the /challenge_languages/new route"
 		# Want to render a dropdown with languages available
 		# (not already used on the current challenge)
 		# [even though the CREATE route below protects against doubles]
@@ -22,7 +22,7 @@ class LanguageController < ApplicationController
 	# INDEX/get all languages for a specific challenge
 	###########
 	get '/:challenge_id' do
-		languages = Language.where(challenge_id: params[:challenge_id])
+		languages = ChallengeLanguage.where(challenge_id: params[:challenge_id])
 		return languages.to_json
 	end
 	
@@ -30,7 +30,7 @@ class LanguageController < ApplicationController
 	###########
 	# NOTE: NOT LIKELY TO NEED THIS ROUTE
 	get '/:challenge_id/:language_id' do
-		language = Language.where(
+		language = ChallengeLanguage.where(
 			challenge_id: params[:challenge_id],			
 			language_id: params[:language_id]
 		)
@@ -41,7 +41,7 @@ class LanguageController < ApplicationController
 	###########
 	post '/:challenge_id/:language_id' do
 		# do not add a language to a challenge if already associated
-		existing_languages = Language.where(challenge_id: params[:challenge_id])
+		existing_languages = ChallengeLanguage.where(challenge_id: params[:challenge_id])
 		existing_language_ids = []
 		existing_languages.each do |language|
 			existing_language_ids.push(language.language_id)
@@ -51,7 +51,7 @@ class LanguageController < ApplicationController
 			puts "language_id #{params[:language_id]} is already included on challenge #{params[:challenge_id]}."
 		else
 			# add the language (since NOT already associated with this challenge)
-			Language.create(
+			ChallengeLanguage.create(
 				challenge_id: params[:challenge_id], 
 				language_id: params[:language_id]
 			)
@@ -69,7 +69,7 @@ class LanguageController < ApplicationController
 	# DELETE/destroy a specific language from a specific challenge
 	###########
 	delete '/:challenge_id/:language_id' do
-		language = Language.where(
+		language = ChallengeLanguage.where(
 			challenge_id: params[:challenge_id],
 			language_id: params[:language_id]
 		).first

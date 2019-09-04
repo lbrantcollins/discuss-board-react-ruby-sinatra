@@ -2,79 +2,49 @@ require 'json'
 
 class TeacherController < ApplicationController
 
+	before do
+		if request.post? or request.patch? or request.put? 
+			payload_body = request.body.read
+			@payload = JSON.parse(payload_body).symbolize_keys
+			puts "---------> Here's our payload: "
+			pp @payload
+		end
+	end
+
 	get '/test' do
 		"you hit the teacher controller"
 	end
 
-	# INDEX/get: list all teachers in no particular order
+	# INDEX/get: probably not needed
 	########### 
-	
 	get '/' do
 		teachers = Teacher.all
 		return teachers.to_json
 	end
 
-	# NEW/get: teachers will register in the User controller
+	# NEW/get: not needed
 	###########
-	get '/new' do
-		"you hit the /teachers/new route"
-		# not needed
-	end
 	
-	# SHOW/get: show all challenges for one teacher
+	# SHOW/get: not needed
 	###########
-	get '/:id/challenges' do
-		challenges = (Keyword.find params[:id]).challenges
-		return challenges.to_json
+
+	# CREATE/post: add item with teacher_id when a teacher registers
+	###########
+	# send the user as the payload (we just need their id)
+	post '/' do
+		teacher = {
+			teacher_id: @payload[:id]
+		}
 	end
 
-	get '/:challenge_id/:keyword_id' do
-		keyword = Keyword.where(
-			challenge_id: params[:challenge_id],			
-			keyword_id: params[:keyword_id]
-		)
-		return keyword.to_json
-	end
-
-	# CREATE/post a keyword to a specific challenge
+	# EDIT/get: not needed
 	###########
-	post '/:challenge_id/:keyword_id' do
-		# do not add a keyword to a challenge if already associated
-		existing_keywords = Keyword.where(challenge_id: params[:challenge_id])
-		existing_keyword_ids = []
-		existing_keywords.each do |keyword|
-			existing_keyword_ids.push(keyword.keyword_id)
-		end
-		if existing_keyword_ids.include?(params[:keyword_id].to_i)
-			# the keyword is already associated with this challenge
-			puts "keyword_id #{params[:keyword_id]} is already included on challenge #{params[:challenge_id]}."
-		else
-			# add the keyword (since NOT already associated with this challenge)
-			Keyword.create(
-				challenge_id: params[:challenge_id], 
-				keyword_id: params[:keyword_id]
-			)
-		end
-	end
 
-	# EDIT/get a keyword on a specific challenge
+	# UPDATE/put: not needed
 	###########
-	# NOT NEEDED (keywords are edited on the keywords table)
+	
 
-	# UPDATE/put an updated keyword on a specific challenge
+	# DELETE/destroy: not needed (keep even if teacher leaves the site)
 	###########
-	# NOT NEEDED (keywords are updated on the keywords table)
-
-	# DELETE/destroy a specific keyword from a specific challenge
-	###########
-	delete '/:challenge_id/:keyword_id' do
-		keyword = Keyword.where(
-			challenge_id: params[:challenge_id],
-			keyword_id: params[:keyword_id]
-		).first
-		
-		keyword.delete
-	end
-
 
 end

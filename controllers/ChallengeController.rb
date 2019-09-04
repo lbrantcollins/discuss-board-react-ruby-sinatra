@@ -76,7 +76,7 @@ class ChallengeController < ApplicationController
 		challenge.destroy
 	end
 
-	# KEYWORDS and LANGUAGES for a challenge
+	# find all KEYWORDS and LANGUAGES for a challenge
 	#############################################################
 
 	# INDEX/get: show all keywords for one challenge (alphabetically)
@@ -101,7 +101,7 @@ class ChallengeController < ApplicationController
 		return (languages.sort).to_json
 	end
 
-	# challenges for a TEACHER
+	# find all challenges for a TEACHER
 	#############################################################
 	# INDEX/get: show all challenges for one teacher
 	###########
@@ -109,9 +109,5 @@ class ChallengeController < ApplicationController
 		challenges = Challenge.where(teacher_id: params[:id])
 		return challenges.to_json
 	end
-
-
-
-
 
 end

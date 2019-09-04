@@ -4,16 +4,23 @@ CREATE DATABASE discuss;
 -- connect to db
 \c discuss 
 
-CREATE TABLE students (
+CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	username VARCHAR(30),
-	password VARCHAR(30)
+	password VARCHAR(30),
+	teacher BOOLEAN
 );
 
 CREATE TABLE teachers (
 	id SERIAL PRIMARY KEY,
-	username VARCHAR(30),
-	password VARCHAR(30)
+	teacher_id INT,
+	FOREIGN KEY (teacher_id) REFERENCES users(id)
+);
+
+CREATE TABLE students (
+	id SERIAL PRIMARY KEY,
+	student_id INT,
+	FOREIGN KEY (student_id) REFERENCES users(id)
 );
 
 CREATE TABLE challenges (

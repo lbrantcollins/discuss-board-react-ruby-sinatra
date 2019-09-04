@@ -13,8 +13,8 @@ class ChallengeLanguageController < ApplicationController
 		end
 	end
 
-	get '/' do
-		"you hit the /challengelanguages route"
+	get '/test' do
+		"you hit the /challengelanguages/test route"
 	end
 
 	# INDEX/get: show all languages for a specific challenge

@@ -1,6 +1,6 @@
 require 'json'
 
-class SnippetsController < ApplicationController
+class SnippetController < ApplicationController
 
 	before do
 		if request.post? or request.patch? or request.put? 

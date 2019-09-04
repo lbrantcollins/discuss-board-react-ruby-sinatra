@@ -13,8 +13,8 @@ class ChallengeKeywordController < ApplicationController
 		end
 	end
 
-	get '/' do
-		"you hit the /challengekeywords route"
+	get '/test' do
+		"you hit the /challengekeywords/test route"
 	end
 
 	# INDEX/get: show all keywords for a specific challenge

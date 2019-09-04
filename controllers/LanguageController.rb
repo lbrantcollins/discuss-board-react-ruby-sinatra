@@ -5,7 +5,7 @@ require 'json'
 class LanguageController < ApplicationController
 
 	get '/test' do
-		"you hit the /languages route"
+		"you hit the /languages/test route"
 	end
 
 	# return alphabetical list of all available languages

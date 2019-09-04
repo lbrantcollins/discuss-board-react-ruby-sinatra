@@ -12,7 +12,7 @@ class ChallengeController < ApplicationController
 	end
 
 	get '/test' do
-		"you hit the challenge controller"
+		"you hit the /challenges/test route"
 	end
 
 	# INDEX/get: show all challenges

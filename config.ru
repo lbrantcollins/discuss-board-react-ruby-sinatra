@@ -2,22 +2,35 @@ require 'sinatra/base'
 
 # controllers
 require './controllers/ApplicationController'
+require './controllers/UserController'
+require './controllers/StudentController'
 require './controllers/TeacherController'
 require './controllers/ChallengeController'
 require './controllers/KeywordController'
 require './controllers/ChallengeKeywordController'
 require './controllers/LanguageController'
 require './controllers/ChallengeLanguageController'
-
+require './controllers/QuestionController'
+require './controllers/AnswerController'
+require './controllers/SnippetController'
+require './controllers/CommentController'
+require './controllers/ObservationController'
 
 
 # models
+require './models/UserModel'
+require './models/StudentModel'
 require './models/TeacherModel'
 require './models/ChallengeModel'
 require './models/KeywordModel'
 require './models/ChallengeKeywordModel'
 require './models/LanguageModel'
 require './models/ChallengeLanguageModel'
+require './models/QuestionModel'
+require './models/AnswerModel'
+require './models/SnippetModel'
+require './models/CommentModel'
+require './models/ObservationModel'
 
 
 # top-level routing
@@ -25,6 +38,14 @@ require './models/ChallengeLanguageModel'
 
 map ('/') {
 	run ApplicationController
+}
+
+map ('/users') {
+	run UserController
+}
+
+map ('/students') {
+	run StudentController
 }
 
 map ('/teachers') {
@@ -50,3 +71,25 @@ map ('/languages') {
 map ('/challengelanguages') {
 	run ChallengeLanguageController
 }
+
+map ('/questions') {
+	run QuestionController
+}
+
+map ('/answers') {
+	run AnswerController
+}
+
+map ('/snippets') {
+	run SnippetController
+}
+
+map ('/comments') {
+	run CommentController
+}
+
+map ('/observations') {
+	run ObservationController
+}
+
+

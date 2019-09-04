@@ -12,7 +12,7 @@ class StudentController < ApplicationController
 	end
 
 	get '/test' do
-		"you hit the /teachers/test route"
+		"you hit the /students/test route"
 	end
 
 	# INDEX/get: probably not needed

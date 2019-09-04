@@ -88,7 +88,7 @@ CREATE TABLE snippets (
 	FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
-CREATE TABLE questions (
+CREATE TABLE comments (
 	id SERIAL PRIMARY KEY,
 	snippet_id INT,
 	student_id INT,

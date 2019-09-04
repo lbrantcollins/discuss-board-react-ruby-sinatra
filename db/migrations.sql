@@ -57,5 +57,16 @@ CREATE TABLE challenge_languages (
 	FOREIGN KEY (language_id) REFERENCES languages(id)
 );
 
+CREATE TABLE questions (
+	id SERIAL PRIMARY KEY,
+	challenge_id INT,
+	student_id INT,
+	question VARCHAR(1024),
+	substantial BOOLEAN,
+	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
+	FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+
 
 

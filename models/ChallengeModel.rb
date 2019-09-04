@@ -9,5 +9,7 @@ class Challenge < ActiveRecord::Base
 	has_many :challenge_languages
 	has_many :languages, through: :challenge_languages
 
+	has_many :questions
+
 	
 end

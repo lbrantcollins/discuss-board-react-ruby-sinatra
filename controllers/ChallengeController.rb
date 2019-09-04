@@ -39,13 +39,14 @@ class ChallengeController < ApplicationController
 			title: @payload[:title],
 			description: @payload[:description],
 		})
+		return 201
 	end
 
 	# SHOW/get: show one challenge
 	###########
 	get '/:id' do
 		challenge = Challenge.find params[:id]
-		return challenge.to_json
+		return [200, challenge.to_json]
 	end
 
    # EDIT/get: show form to edit an existing challenge
@@ -70,9 +71,11 @@ class ChallengeController < ApplicationController
 
 	# DELETE/destroy: delete a challenge 
 	###########
+#???????????????????????????????????????????????????????????????
 	# this deletes all associated questions, answers (snippets), comments
 	delete '/:id' do
 		challenge = Challenge.find params[:id]
+		# does this delete the associate teacher observation?
 		challenge.destroy
 	end
 
@@ -109,5 +112,6 @@ class ChallengeController < ApplicationController
 		challenges = Challenge.where(teacher_id: params[:id])
 		return challenges.to_json
 	end
+
 
 end

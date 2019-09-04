@@ -6,6 +6,6 @@ class Question < ActiveRecord::Base
 	belongs_to :challenge
 	has_one :challenge
 
-	has_one :answer
+	has_one :response
 	
 end

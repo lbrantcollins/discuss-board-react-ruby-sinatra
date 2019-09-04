@@ -2,7 +2,7 @@ class Teacher < ActiveRecord::Base
 
 	has_many :challenges
 
-	has_many :answers
+	has_many :responses
 
 	has_many :observations
 

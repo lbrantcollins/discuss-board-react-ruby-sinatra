@@ -11,7 +11,7 @@ require './controllers/ChallengeKeywordController'
 require './controllers/LanguageController'
 require './controllers/ChallengeLanguageController'
 require './controllers/QuestionController'
-require './controllers/AnswerController'
+require './controllers/ResponseController'
 require './controllers/SnippetController'
 require './controllers/CommentController'
 require './controllers/ObservationController'
@@ -27,7 +27,7 @@ require './models/ChallengeKeywordModel'
 require './models/LanguageModel'
 require './models/ChallengeLanguageModel'
 require './models/QuestionModel'
-require './models/AnswerModel'
+require './models/ResponseModel'
 require './models/SnippetModel'
 require './models/CommentModel'
 require './models/ObservationModel'
@@ -76,8 +76,8 @@ map ('/questions') {
 	run QuestionController
 }
 
-map ('/answers') {
-	run AnswerController
+map ('/responses') {
+	run ResponseController
 }
 
 map ('/snippets') {

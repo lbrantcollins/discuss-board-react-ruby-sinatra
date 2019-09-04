@@ -1,4 +1,4 @@
-class Answer < ActiveRecord::Base
+class Response < ActiveRecord::Base
 
 	belongs_to :question
 	has_one :question

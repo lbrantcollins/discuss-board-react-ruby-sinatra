@@ -26,8 +26,8 @@ FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board
 COPY questions(challenge_id, student_id, question, substantial)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/questions.csv' DELIMITER ',' CSV HEADER;
 
-COPY answers(question_id, teacher_id, answer)
-FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/answers.csv' DELIMITER ',' CSV HEADER;
+COPY responses(question_id, teacher_id, answer)
+FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/responses.csv' DELIMITER ',' CSV HEADER;
 
 COPY snippets(challenge_id, language_id, student_id, snippet, substantial)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/snippets.csv' DELIMITER ',' CSV HEADER;

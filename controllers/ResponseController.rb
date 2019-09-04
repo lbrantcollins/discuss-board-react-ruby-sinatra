@@ -1,6 +1,6 @@
 require 'json'
 
-class AnswerController < ApplicationController
+class ResponseController < ApplicationController
 
 	before do
 		if request.post? or request.patch? or request.put? 
@@ -12,7 +12,7 @@ class AnswerController < ApplicationController
 	end
 
 	get '/test' do
-		"you hit the /answers/test route"
+		"you hit the /responses/test route"
 	end
 
 	# INDEX/get: 

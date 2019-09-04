@@ -67,11 +67,11 @@ CREATE TABLE questions (
 	FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
-CREATE TABLE answers (
+CREATE TABLE responses (
 	id SERIAL PRIMARY KEY,
 	question_id INT,
 	teacher_id INT,
-	answer VARCHAR(1024),
+	response VARCHAR(1024),
 	FOREIGN KEY (question_id) REFERENCES questions(id),
 	FOREIGN KEY (teacher_id) REFERENCES teachers(id)
 );

@@ -67,6 +67,24 @@ CREATE TABLE questions (
 	FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
+CREATE TABLE answers (
+	id SERIAL PRIMARY KEY,
+	question_id INT,
+	teacher_id INT,
+	answer VARCHAR(1024),
+	FOREIGN KEY (question_id) REFERENCES questions(id),
+	FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+);
 
-
+CREATE TABLE snippets (
+	id SERIAL PRIMARY KEY,
+	challenge_id INT,
+	language_id INT,
+	student_id INT,
+	snippet VARCHAR(8192),
+	substantial BOOLEAN,
+	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
+	FOREIGN KEY (language_id) REFERENCES languages(id),
+	FOREIGN KEY (student_id) REFERENCES students(id)
+);
 

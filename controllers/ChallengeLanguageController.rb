@@ -14,36 +14,24 @@ class ChallengeLanguageController < ApplicationController
 	end
 
 	get '/' do
-		"you hit the /challenge_languages route"
+		"you hit the /challengelanguages route"
 	end
 
-	# NEW/get form to add a language to a specific challenge
-	###########
-	get '/new' do
-		"you hit the /challenge_languages/new route"
-		# not needed
-	end
-
-	# CREATE/post to add a new language to an existing challenge
-	###########
-	post '/' do
-		puts @payload
-		puts "challenge_id = X#{@payload[:challenge_id]}X"
-		puts "language_id = X#{@payload[:language_id]}X"
-
-		ChallengeLanguage.create({
-			challenge_id: @payload[:challenge_id],
-			language_id: @payload[:language_id]
-		})
-	end
-
-	# INDEX/get all languages for a specific challenge
+	# INDEX/get: show all languages for a specific challenge
 	###########
 	get '/:challenge_id' do
 		languages = ChallengeLanguage.where(challenge_id: params[:challenge_id])
 		return languages.to_json
 	end
-	
+
+	# NEW/get form to add a language to a specific challenge
+	###########
+	get '/new' do
+		"you hit the /challengelanguages/new route"
+		# Want to render a dropdown with languages available
+		# (not already used on the current challenge)
+	end
+
 	# SHOW/get one language from a challenge
 	###########
 	# NOTE: NOT LIKELY TO NEED THIS ROUTE
@@ -55,34 +43,24 @@ class ChallengeLanguageController < ApplicationController
 		return language.to_json
 	end
 
-	# CREATE/post a language to a specific challenge
+	# CREATE/post to add a new language to an existing challenge
 	###########
-	post '/:challenge_id/:language_id' do
-		# do not add a language to a challenge if already associated
-		existing_languages = ChallengeLanguage.where(challenge_id: params[:challenge_id])
-		existing_language_ids = []
-		existing_languages.each do |language|
-			existing_language_ids.push(language.language_id)
-		end
-		if existing_language_ids.include?(params[:language_id].to_i)
-			# the language is already associated with this challenge
-			puts "language_id #{params[:language_id]} is already included on challenge #{params[:challenge_id]}."
-		else
-			# add the language (since NOT already associated with this challenge)
-			ChallengeLanguage.create(
-				challenge_id: params[:challenge_id], 
-				language_id: params[:language_id]
-			)
-		end
+	# if dropdown screens out any languages already assoc with the challenge,
+	# (see the /new route), then no need to check if already exists
+	post '/' do
+		ChallengeLanguage.create({
+			challenge_id: @payload[:challenge_id],
+			language_id: @payload[:language_id]
+		})
 	end
 
-	# EDIT/get a language on a specific challenge
+	# EDIT/get: not needed
 	###########
-	# NOT NEEDED (languages are edited on the language_choices table)
+	# NOT NEEDED (languages are updated on languages table, LanguageController)
 
-	# UPDATE/put an updated language on a specific challenge
+	# UPDATE/put: not needed
 	###########
-	# NOT NEEDED (languages are updated on the language_choices table)
+	# NOT NEEDED (languages are updated on languages table, LanguageController)
 
 	# DELETE/destroy a specific language from a specific challenge
 	###########
@@ -91,10 +69,8 @@ class ChallengeLanguageController < ApplicationController
 			challenge_id: params[:challenge_id],
 			language_id: params[:language_id]
 		).first
-		
+		# not "destroy" since language and challenge are not being deleted
 		language.delete
 	end
-
-
 
 end

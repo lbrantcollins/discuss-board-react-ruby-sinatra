@@ -1,13 +1,17 @@
 require 'json'
 
-# list of keyword choices to associate with challenges
-# only available to teachers (not students)
-# teachers can add keywords to the list
-# CAUTION: if delete a keyword, that keyword will need to be 
-# removed from any challenges where it was deployed
-# Probaby should warn the user about that.
+# list of keywords teachers can associate with challenges
 
 class KeywordController < ApplicationController
+
+	before do
+		if request.post? or request.patch? or request.put? 
+			payload_body = request.body.read
+			@payload = JSON.parse(payload_body).symbolize_keys
+			puts "---------> Here's our payload: "
+			pp @payload
+		end
+	end
 
 	get '/test' do
 		"you have reached the /keywords/test route"
@@ -24,67 +28,46 @@ class KeywordController < ApplicationController
 		return (keywords.sort).to_json
 	end
 
-	# NEW/get form to add a keyword to a specific challenge
+	# NEW/get form to add a keyword to the list of available keywords
 	###########
 	get '/new' do
 		"you hit the /keywords/new route"
 		# React will provide the form without
 		# needing to be prompted by this route
 	end
-	
+
 	# SHOW/get: not needed
 	###########
-	get '/:id/challenges' do
-		challenges = (Keyword.find params[:id]).challenges
-		return challenges.to_json
+
+	# CREATE/post: add a keyword to the list of available keywords
+	###########
+	post '/' do
+		Keyword.create({
+			keyword: @payload[:keyword]
+		})
+	end
+	
+	# EDIT/get form change an existing keyword 
+	###########
+	# React will provide the form
+
+	# UPDATE/put: update/modify an existing keyword 
+	###########
+	# NOTE: This will change the keyword on ALL past posts too
+	# Probably should warn the user about that
+	put '/:id' do
+		keyword = Keyword.find params[:id]
+		keyword[:keyword] = @payload[:keyword]
+		keyword.save
 	end
 
-	get '/:challenge_id/:keyword_id' do
-		keyword = Keyword.where(
-			challenge_id: params[:challenge_id],			
-			keyword_id: params[:keyword_id]
-		)
-		return keyword.to_json
-	end
-
-	# CREATE/post a keyword to a specific challenge
+	# DELETE/destroy a keyword 
 	###########
-	post '/:challenge_id/:keyword_id' do
-		# do not add a keyword to a challenge if already associated
-		existing_keywords = Keyword.where(challenge_id: params[:challenge_id])
-		existing_keyword_ids = []
-		existing_keywords.each do |keyword|
-			existing_keyword_ids.push(keyword.keyword_id)
-		end
-		if existing_keyword_ids.include?(params[:keyword_id].to_i)
-			# the keyword is already associated with this challenge
-			puts "keyword_id #{params[:keyword_id]} is already included on challenge #{params[:challenge_id]}."
-		else
-			# add the keyword (since NOT already associated with this challenge)
-			Keyword.create(
-				challenge_id: params[:challenge_id], 
-				keyword_id: params[:keyword_id]
-			)
-		end
-	end
-
-	# EDIT/get a keyword on a specific challenge
-	###########
-	# NOT NEEDED (keywords are edited on the keywords table)
-
-	# UPDATE/put an updated keyword on a specific challenge
-	###########
-	# NOT NEEDED (keywords are updated on the keywords table)
-
-	# DELETE/destroy a specific keyword from a specific challenge
-	###########
-	delete '/:challenge_id/:keyword_id' do
-		keyword = Keyword.where(
-			challenge_id: params[:challenge_id],
-			keyword_id: params[:keyword_id]
-		).first
-		
-		keyword.delete
+	# NOTE: This will remove the keyword from ALL past posts too
+	# Probably should warn the user about that
+	delete '/:id' do
+		keyword = ChallengeKeyword.find params[:id]
+		keyword.destroy
 	end
 
 

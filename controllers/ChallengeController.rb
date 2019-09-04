@@ -48,6 +48,37 @@ class ChallengeController < ApplicationController
 		return challenge.to_json
 	end
 
+   # EDIT/get: show form to edit an existing challenge
+	###########
+	get '/:id/edit' do
+		"you hit the /challenges/:id/edit route"
+		# React will provide a link to the form without
+		# needing to be prompted by this route
+	end
+
+	# UPDATE/put: update an existing challenge into the DB
+	###########
+	put '/:id' do
+		challenge = Challenge.find params[:id]
+
+		challenge[:teacher_id] = @payload[:teacher_id]
+		challenge[:title] = @payload[:title]
+		challenge[:description] = @payload[:description]
+
+		challenge.save	
+	end
+
+	# DELETE/destroy: delete a challenge 
+	###########
+	# this deletes all associated questions, answers (snippets), comments
+	delete '/:id' do
+		challenge = Challenge.find params[:id]
+		challenge.destroy
+	end
+
+	# KEYWORDS and LANGUAGES for a challenge
+	#############################################################
+
 	# INDEX/get: show all keywords for one challenge (alphabetically)
 	###########
 	get '/:id/keywords' do
@@ -70,33 +101,17 @@ class ChallengeController < ApplicationController
 		return (languages.sort).to_json
 	end
 
-   # EDIT/get: show form to edit an existing challenge
+	# challenges for a TEACHER
+	#############################################################
+	# INDEX/get: show all challenges for one teacher
 	###########
-	get '/:id/edit' do
-		"you hit the /challenges/:id/edit route"
-		# React will provide a link to the form without
-		# needing to be prompted by this route
+	get '/teacher/:id' do
+		challenges = Challenge.where(teacher_id: params[:id])
+		return challenges.to_json
 	end
 
-	# UPDATE/put: update an existing challenge into the DB
-	###########
-	put '/:id' do
-		challenge = Challenge.find params[:id]
 
-		challenge[:teacher_id] = @payload[:teacher_id]
-		challenge[:title] = @payload[:title]
-		challenge[:description] = @payload[:description]
 
-		challenge.save
-	end
-
-	# DELETE/destroy: delete a challenge 
-	###########
-	# this deletes all associated questions, answers (snippets), comments
-	delete '/:id' do
-		challenge = Challenge.find params[:id]
-		challenge.destroy
-	end
 
 
 end

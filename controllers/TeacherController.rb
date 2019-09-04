@@ -6,61 +6,75 @@ class TeacherController < ApplicationController
 		"you hit the teacher controller"
 	end
 
-	# index
-
+	# INDEX/get: list all teachers in no particular order
+	########### 
+	
 	get '/' do
 		teachers = Teacher.all
 		return teachers.to_json
 	end
 
-	# # create
-	# post '/' do
-	# 	new_item = Item.new
-	# 	new_item.content = params[:content]
-	# 	new_item.save
+	# NEW/get: teachers will register in the User controller
+	###########
+	get '/new' do
+		"you hit the /teachers/new route"
+		# not needed
+	end
+	
+	# SHOW/get: show all challenges for one teacher
+	###########
+	get '/:id/challenges' do
+		challenges = (Keyword.find params[:id]).challenges
+		return challenges.to_json
+	end
 
-	# 	redirect '/items'
-	# end
+	get '/:challenge_id/:keyword_id' do
+		keyword = Keyword.where(
+			challenge_id: params[:challenge_id],			
+			keyword_id: params[:keyword_id]
+		)
+		return keyword.to_json
+	end
 
-	# # new
+	# CREATE/post a keyword to a specific challenge
+	###########
+	post '/:challenge_id/:keyword_id' do
+		# do not add a keyword to a challenge if already associated
+		existing_keywords = Keyword.where(challenge_id: params[:challenge_id])
+		existing_keyword_ids = []
+		existing_keywords.each do |keyword|
+			existing_keyword_ids.push(keyword.keyword_id)
+		end
+		if existing_keyword_ids.include?(params[:keyword_id].to_i)
+			# the keyword is already associated with this challenge
+			puts "keyword_id #{params[:keyword_id]} is already included on challenge #{params[:challenge_id]}."
+		else
+			# add the keyword (since NOT already associated with this challenge)
+			Keyword.create(
+				challenge_id: params[:challenge_id], 
+				keyword_id: params[:keyword_id]
+			)
+		end
+	end
 
-	# get '/new' do
-	# 	erb :item_new
-	# end
+	# EDIT/get a keyword on a specific challenge
+	###########
+	# NOT NEEDED (keywords are edited on the keywords table)
 
+	# UPDATE/put an updated keyword on a specific challenge
+	###########
+	# NOT NEEDED (keywords are updated on the keywords table)
 
-	# # edit
-
-	# get '/:id/edit' do
-	# 	@item = Item.find params[:id]
-	# 	erb :item_edit
-	# end
-
-	# # show
-
-	# get '/:id' do
-	# 	@item = Item.find params[:id]
-	# 	erb :item_show
-	# end
-
-	# # update
-
-	# put '/:id' do
-	# 	item = Item.find params[:id]
-	# 	item.content = params[:content]
-	# 	item.save
-
-	# 	redirect '/items'
-	# end
-
-	# # delete
-
-	# delete '/:id' do
-	# 	item = Item.find params[:id]
-	# 	item.destroy
-
-	# 	redirect '/items'
-	# end
+	# DELETE/destroy a specific keyword from a specific challenge
+	###########
+	delete '/:challenge_id/:keyword_id' do
+		keyword = Keyword.where(
+			challenge_id: params[:challenge_id],
+			keyword_id: params[:keyword_id]
+		).first
+		
+		keyword.delete
+	end
 
 
 end

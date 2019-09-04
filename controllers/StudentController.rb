@@ -1,6 +1,6 @@
 require 'json'
 
-class TeacherController < ApplicationController
+class StudentController < ApplicationController
 
 	before do
 		if request.post? or request.patch? or request.put? 
@@ -18,8 +18,8 @@ class TeacherController < ApplicationController
 	# INDEX/get: probably not needed
 	########### 
 	get '/' do
-		teachers = Teacher.all
-		return teachers.to_json
+		students = Student.all
+		return students.to_json
 	end
 
 	# NEW/get: not needed
@@ -28,12 +28,12 @@ class TeacherController < ApplicationController
 	# SHOW/get: not needed
 	###########
 
-	# CREATE/post: add item with teacher_id when a teacher registers
+	# CREATE/post: add item with student_id when a student registers
 	###########
 	# send the user as the payload (we just need their id)
 	post '/' do
-		Teacher.create({
-			teacher_id: @payload[:id]
+		Student.create({
+			student_id: @payload[:id]
 		})
 	end
 
@@ -43,7 +43,8 @@ class TeacherController < ApplicationController
 	# UPDATE/put: not needed
 	###########
 	
-	# DELETE/destroy: not needed (keep even if teacher leaves the site)
+	# DELETE/destroy: not needed (keep even if student leaves the site)
+	# since their posts are anonymous to other users anyway
 	###########
 
 end

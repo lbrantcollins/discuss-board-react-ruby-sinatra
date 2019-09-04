@@ -32,7 +32,7 @@ class KeywordController < ApplicationController
 		# needing to be prompted by this route
 	end
 	
-	# SHOW/get all challenges for one keyword
+	# SHOW/get: not needed
 	###########
 	get '/:id/challenges' do
 		challenges = (Keyword.find params[:id]).challenges

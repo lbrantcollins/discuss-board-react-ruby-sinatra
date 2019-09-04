@@ -88,3 +88,27 @@ CREATE TABLE snippets (
 	FOREIGN KEY (student_id) REFERENCES students(id)
 );
 
+CREATE TABLE questions (
+	id SERIAL PRIMARY KEY,
+	snippet_id INT,
+	student_id INT,
+	comment VARCHAR(1024),
+	substantial BOOLEAN,
+	FOREIGN KEY (snippet_id) REFERENCES snippets(id),
+	FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE TABLE observations (
+	id SERIAL PRIMARY KEY,
+	comment_id INT,
+	teacher_id INT,
+	observation VARCHAR(1024),
+	FOREIGN KEY (comment_id) REFERENCES comments(id),
+	FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+);
+
+
+
+
+
+

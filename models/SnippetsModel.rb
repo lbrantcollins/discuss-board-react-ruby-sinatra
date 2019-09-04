@@ -1,4 +1,4 @@
-class Question < ActiveRecord::Base
+class Snippet < ActiveRecord::Base
 
 	belongs_to :challenge
 	has_one :challenge

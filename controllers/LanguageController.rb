@@ -2,46 +2,39 @@ require 'json'
 
 # languages associated with a specific challenge
 
-class ChallengeLanguageController < ApplicationController
+class LanguageController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
+	get '/test' do
+		"you hit the /languages route"
 	end
 
+	# return alphabetical list of all available languages
 	get '/' do
-		"you hit the /challenge_languages route"
+		language_entries = Language.all
+		languages = []
+		language_entries.map do |entry|
+			languages.push(entry.language)
+		end
+		return (languages.sort).to_json
 	end
 
-	# NEW/get form to add a language to a specific challenge
+	# NEW/get form to add a language 
 	###########
 	get '/new' do
-		"you hit the /challenge_languages/new route"
-		# not needed
+		"you hit the /languages/new route"
+		# React will provide the form without
+		# needing to be prompted by this route
 	end
 
-	# CREATE/post to add a new language to an existing challenge
-	###########
-	post '/' do
-		puts @payload
-		puts "challenge_id = X#{@payload[:challenge_id]}X"
-		puts "language_id = X#{@payload[:language_id]}X"
-
-		ChallengeLanguage.create({
-			challenge_id: @payload[:challenge_id],
-			language_id: @payload[:language_id]
-		})
-	end
-
-	# INDEX/get all languages for a specific challenge
+	# INDEX/get all languages for a specific challenge (alphabetically)
 	###########
 	get '/:challenge_id' do
-		languages = ChallengeLanguage.where(challenge_id: params[:challenge_id])
-		return languages.to_json
+		language_entries = ChallengeLanguage.where(challenge_id: params[:challenge_id])
+		languages = []
+		language_entries.map do |entry|
+			languages.push(entry.language)
+		end
+		return (languages.sort).to_json
 	end
 	
 	# SHOW/get one language from a challenge

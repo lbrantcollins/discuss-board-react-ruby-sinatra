@@ -39,7 +39,7 @@ map ('/keywords') {
 	run KeywordController
 }
 
-map ('/challenge_keywords') {
+map ('/challengekeywords') {
 	run ChallengeKeywordController
 }
 
@@ -47,6 +47,6 @@ map ('/languages') {
 	run LanguageController
 }
 
-map ('/challenge_languages') {
+map ('/challengelanguages') {
 	run ChallengeLanguageController
 }

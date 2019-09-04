@@ -4,19 +4,39 @@ require 'json'
 
 class ChallengeKeywordController < ApplicationController
 
+	before do
+		if request.post? or request.patch? or request.put? 
+			payload_body = request.body.read
+			@payload = JSON.parse(payload_body).symbolize_keys
+			puts "---------> Here's our payload: "
+			pp @payload
+		end
+	end
+
 	get '/' do
-		"you hit the /challenge_keywords route"
+		"you hit the /challengekeywords route"
+	end
+
+	# CREATE/post: add a new keyword to an existing challenge
+	###########
+	post '/' do
+		puts "challenge_id = #{params[:challenge_id]}"
+		puts "keyword_id = #{params[:keyword_id]}"
+		ChallengeKeyword.create({
+			challenge_id: @payload[:challenge_id],
+			keyword_id: @payload[:keyword_id]
+		})
 	end
 
 	# NEW/get form to add a keyword to a specific challenge
 	###########
 	get '/new' do
-		"you hit the /challenge_keywords/new route"
+		"you hit the /challengekeywords/new route"
 		# Want to render a dropdown with keywords available
 		# (not already used on the current challenge)
 		# [even though the CREATE route below protects against doubles]
 		# So, would just get keywords assoc with challenge
-		# ...which is actually the same as the INDEX/get route above
+		# ...which is actually the same as the INDEX/get route below
 	end
 
 	# INDEX/get all keywords for a specific challenge

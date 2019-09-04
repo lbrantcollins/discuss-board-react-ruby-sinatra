@@ -2,73 +2,101 @@ require 'json'
 
 class ChallengeController < ApplicationController
 
+	before do
+		if request.post? or request.patch? or request.put? 
+			payload_body = request.body.read
+			@payload = JSON.parse(payload_body).symbolize_keys
+			puts "---------> Here's our payload: "
+			pp @payload
+		end
+	end
+
 	get '/test' do
 		"you hit the challenge controller"
 	end
 
-	# index
-
+	# INDEX/get: show all challenges
+	########### 
 	get '/' do
 		# get all items from DB
 		challenges = Challenge.all
 		return challenges.to_json
 	end
 
+	# NEW/get: show form to add a new challenge
+	###########
+	get '/new' do
+		"you hit the /challenges/new route"
+		# React will provide the form without
+		# needing to be prompted by this route
+	end
+
+	# CREATE/post: add a new challenge
+	###########
+	post '/' do
+		Challenge.create({
+			teacher_id: @payload[:teacher_id],
+			title: @payload[:title],
+			description: @payload[:description],
+		})
+	end
+
+	# SHOW/get: show one challenge
+	###########
 	get '/:id' do
 		challenge = Challenge.find params[:id]
-		# keywords = Keyword.find challenge_id == params[:id]
 		return challenge.to_json
 	end
 
+	# INDEX/get: show all keywords for one challenge (alphabetically)
+	###########
+	get '/:id/keywords' do
+		keyword_hashes = (Challenge.find params[:id]).keywords
+		keywords = []
+		keyword_hashes.map do |keyword_hash|
+			keywords.push(keyword_hash.keyword)
+		end
+		return (keywords.sort).to_json
+	end
 
-	# # create
-	# post '/' do
-	# 	new_item = Item.new
-	# 	new_item.content = params[:content]
-	# 	new_item.save
+	# INDEX/get: show all languages for one challenge
+	###########
+	get '/:id/languages' do
+		language_hashes = (Challenge.find params[:id]).languages
+		languages = []
+		language_hashes.map do |language_hash|
+			languages.push(language_hash.language)
+		end
+		return (languages.sort).to_json
+	end
 
-	# 	redirect '/items'
-	# end
+   # EDIT/get: show form to edit an existing challenge
+	###########
+	get '/:id/edit' do
+		"you hit the /challenges/:id/edit route"
+		# React will provide a link to the form without
+		# needing to be prompted by this route
+	end
 
-	# # new
+	# UPDATE/put: update an existing challenge into the DB
+	###########
+	put '/:id' do
+		challenge = Challenge.find params[:id]
 
-	# get '/new' do
-	# 	erb :item_new
-	# end
+		challenge[:teacher_id] = @payload[:teacher_id]
+		challenge[:title] = @payload[:title]
+		challenge[:description] = @payload[:description]
 
+		challenge.save
+	end
 
-	# # edit
-
-	# get '/:id/edit' do
-	# 	@item = Item.find params[:id]
-	# 	erb :item_edit
-	# end
-
-	# # show
-
-	# get '/:id' do
-	# 	@item = Item.find params[:id]
-	# 	erb :item_show
-	# end
-
-	# # update
-
-	# put '/:id' do
-	# 	item = Item.find params[:id]
-	# 	item.content = params[:content]
-	# 	item.save
-
-	# 	redirect '/items'
-	# end
-
-	# # delete
-
-	# delete '/:id' do
-	# 	item = Item.find params[:id]
-	# 	item.destroy
-
-	# 	redirect '/items'
-	# end
+	# DELETE/destroy: delete a challenge 
+	###########
+	# this deletes all associated questions, answers (snippets), comments
+	delete '/:id' do
+		challenge = Challenge.find params[:id]
+		challenge.destroy
+	end
 
 
 end

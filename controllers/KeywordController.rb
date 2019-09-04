@@ -13,9 +13,15 @@ class KeywordController < ApplicationController
 		"you have reached the /keywords/test route"
 	end
 
+	# INDEX/get alphabetical list of all available keywords
+	########### 
 	get '/' do
-		keywords = Keyword.all
-		return keywords.to_json
+		keyword_hashes = Keyword.all
+		keywords = []
+		keyword_hashes.map do |keyword_hash|
+			keywords.push(keyword_hash.keyword)
+		end
+		return (keywords.sort).to_json
 	end
 
 	# NEW/get form to add a keyword to a specific challenge
@@ -25,17 +31,14 @@ class KeywordController < ApplicationController
 		# React will provide the form without
 		# needing to be prompted by this route
 	end
-
-	# INDEX/get all keywords for a specific challenge
-	###########
-	get '/:challenge_id' do
-		keywords = Keyword.where(challenge_id: params[:challenge_id])
-		return keywords.to_json
-	end
 	
-	# SHOW/get one keyword from a challenge
+	# SHOW/get all challenges for one keyword
 	###########
-	# NOTE: NOT LIKELY TO NEED THIS ROUTE
+	get '/:id/challenges' do
+		challenges = (Keyword.find params[:id]).challenges
+		return challenges.to_json
+	end
+
 	get '/:challenge_id/:keyword_id' do
 		keyword = Keyword.where(
 			challenge_id: params[:challenge_id],			

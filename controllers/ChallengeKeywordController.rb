@@ -45,6 +45,11 @@ class ChallengeKeywordController < ApplicationController
 		payload = JSON.parse(request.body.read)
 		# 'activerecord-import' module batch inserts to DB (efficiency)
 		ChallengeKeyword.import(payload)
+		# do NOT return the result of .import 
+		# this is a known bug (feature?) of the activerecord-import gem
+		# .import does not return a string (or stringified hash)
+		# So, I'll just return the status code:
+		200
 	end
 
 	# EDIT/get: not needed
@@ -73,7 +78,7 @@ class ChallengeKeywordController < ApplicationController
 		payload = JSON.parse(request.body.read)
 		keywords = ChallengeKeyword.where(id: payload)
 		# destroy "in_batches" for batch removal from DB (efficiency)
-		keywords.in_batches(of 1000).destroy_all
+		keywords.in_batches(of: 1000).destroy_all
 	end
 
 end

@@ -12,7 +12,7 @@ class KeywordController < ApplicationController
 	########### 
 	get '/' do
 		keywords = Keyword.all
-		keywords.to_json
+		[200, keywords.to_json]
 	end
 
 	# NEW/get form to add a keyword to the list of available keywords
@@ -51,6 +51,7 @@ class KeywordController < ApplicationController
 		keyword[:keyword] = payload[:keyword]
 
 		keyword.save
+		[201, keyword.to_json]
 	end
 
 	# DELETE/destroy keyword(s) from an array of ids 

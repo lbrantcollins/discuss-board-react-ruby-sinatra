@@ -15,7 +15,7 @@ class ChallengeKeywordController < ApplicationController
 	###########
 	get '/:challenge_id' do
 		keywords = ChallengeKeyword.where(challenge_id: params[:challenge_id])
-		return keywords.to_json
+		[200, keywords.to_json]
 	end
 
 	# NEW/get: form to add a keyword to a specific challenge
@@ -34,7 +34,7 @@ class ChallengeKeywordController < ApplicationController
 			challenge_id: params[:challenge_id],			
 			keyword_id: params[:keyword_id]
 		)
-		return keyword.to_json
+		[200, keyword.to_json]
 	end
 
 	# CREATE/post: add keyword(s) to an existing challenge
@@ -44,12 +44,12 @@ class ChallengeKeywordController < ApplicationController
 		# each with properties of challenge_id and keyword_id
 		payload = JSON.parse(request.body.read)
 		# 'activerecord-import' module batch inserts to DB (efficiency)
-		ChallengeKeyword.import(payload)
+		challenges = ChallengeKeyword.import(payload)
 		# do NOT return the result of .import 
 		# this is a known bug (feature?) of the activerecord-import gem
 		# .import does not return a string (or stringified hash)
 		# So, I'll just return the status code:
-		200
+		[200, challenges.to_json]
 	end
 
 	# EDIT/get: not needed

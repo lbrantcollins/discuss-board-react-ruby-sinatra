@@ -26,19 +26,19 @@ class ChallengeController < ApplicationController
 	###########
 	post '/' do
 		payload = JSON.parse(request.body.read)
-		Challenge.create({
+		challenge = Challenge.create({
 			teacher_id: payload[:teacher_id],
 			title: payload[:title],
 			description: payload[:description],
 		})
-		return 201
+		[201, challenge.to_json]
 	end
 
 	# SHOW/get: show one challenge
 	###########
 	get '/:id' do
 		challenge = Challenge.find params[:id]
-		return [200, challenge.to_json]
+		[200, challenge.to_json]
 	end
 
    # EDIT/get: show form to edit an existing challenge
@@ -55,11 +55,12 @@ class ChallengeController < ApplicationController
 		challenge = Challenge.find params[:id]
 
 		payload = JSON.parse(request.body.read)
-		challenge[:teacher_id] = payload[:teacher_id]
-		challenge[:title] = payload[:title]
-		challenge[:description] = payload[:description]
+		challenge[:teacher_id] = payload["teacher_id"]
+		challenge[:title] = payload["title"]
+		challenge[:description] = payload["description"]
 
 		challenge.save	
+		[201, challenge.to_json]
 	end
 
 	# DELETE/destroy: delete a challenge 
@@ -103,7 +104,7 @@ class ChallengeController < ApplicationController
 	###########
 	get '/teacher/:id' do
 		challenges = Challenge.where(teacher_id: params[:id])
-		return challenges.to_json
+		[200, challenges.to_json]
 	end
 
 

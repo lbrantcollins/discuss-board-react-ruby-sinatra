@@ -1,17 +1,11 @@
 require 'json'
 
+# allow multi-record create for efficiency
+require 'activerecord-import'
+
 # keywords associated with a specific challenge
 
 class ChallengeKeywordController < ApplicationController
-
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
 
 	get '/test' do
 		"you hit the /challengekeywords/test route"
@@ -43,15 +37,14 @@ class ChallengeKeywordController < ApplicationController
 		return keyword.to_json
 	end
 
-	# CREATE/post: add a new keyword to an existing challenge
+	# CREATE/post: add keyword(s) to an existing challenge
 	###########
 	post '/' do
-		# if dropdown screens out any keywords already assoc with the challenge,
-		# (see the /new route), then no need to check if already exists
-		ChallengeKeyword.create({
-			challenge_id: @payload[:challenge_id],
-			keyword_id: @payload[:keyword_id]
-		})
+		# payload must be an array of objects
+		# each with properties of challenge_id and keyword_id
+		payload = JSON.parse(request.body.read)
+		# 'activerecord-import' module batch inserts to DB (efficiency)
+		ChallengeKeyword.import(payload)
 	end
 
 	# EDIT/get: not needed
@@ -71,6 +64,16 @@ class ChallengeKeywordController < ApplicationController
 		).first
 		# not "destroy" since keyword and challenge are not being deleted
 		keyword.delete
+	end
+
+	# DELETE: remove several keywords from a challenge
+	###########
+	delete '/' do
+		# payload must be an array of through-table ids
+		payload = JSON.parse(request.body.read)
+		keywords = ChallengeKeyword.where(id: payload)
+		# destroy "in_batches" for batch removal from DB (efficiency)
+		keywords.in_batches(of 1000).destroy_all
 	end
 
 end

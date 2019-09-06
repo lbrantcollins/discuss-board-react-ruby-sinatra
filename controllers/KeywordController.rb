@@ -4,28 +4,16 @@ require 'json'
 
 class KeywordController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you have reached the /keywords/test route"
 	end
 
-	# INDEX/get alphabetical list of all available keywords
+	# INDEX/get list of all available keywords
 	########### 
 	get '/' do
-		keyword_hashes = Keyword.all
-		keywords = []
-		keyword_hashes.map do |keyword_hash|
-			keywords.push(keyword_hash.keyword)
-		end
-		return (keywords.sort).to_json
+		keywords = Keyword.all
+		p keywords.to_json
+		keywords.to_json
 	end
 
 	# NEW/get form to add a keyword to the list of available keywords
@@ -42,9 +30,11 @@ class KeywordController < ApplicationController
 	# CREATE/post: add a keyword to the list of available keywords
 	###########
 	post '/' do
-		Keyword.create({
-			keyword: @payload[:keyword]
+		payload = JSON.parse(request.body.read)
+		keyword = Keyword.create({
+			keyword: payload[:keyword]
 		})
+		[200, keyword]
 	end
 	
 	# EDIT/get form change an existing keyword 
@@ -57,7 +47,10 @@ class KeywordController < ApplicationController
 	# Probably should warn the user about that
 	put '/:id' do
 		keyword = Keyword.find params[:id]
-		keyword[:keyword] = @payload[:keyword]
+
+		payload = JSON.parse(request.body.read)
+		keyword[:keyword] = payload[:keyword]
+
 		keyword.save
 	end
 

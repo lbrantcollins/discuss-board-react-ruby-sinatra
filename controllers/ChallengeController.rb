@@ -2,15 +2,6 @@ require 'json'
 
 class ChallengeController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you hit the /challenges/test route"
 	end
@@ -34,10 +25,11 @@ class ChallengeController < ApplicationController
 	# CREATE/post: add a new challenge
 	###########
 	post '/' do
+		payload = JSON.parse(request.body.read)
 		Challenge.create({
-			teacher_id: @payload[:teacher_id],
-			title: @payload[:title],
-			description: @payload[:description],
+			teacher_id: payload[:teacher_id],
+			title: payload[:title],
+			description: payload[:description],
 		})
 		return 201
 	end
@@ -62,9 +54,10 @@ class ChallengeController < ApplicationController
 	put '/:id' do
 		challenge = Challenge.find params[:id]
 
-		challenge[:teacher_id] = @payload[:teacher_id]
-		challenge[:title] = @payload[:title]
-		challenge[:description] = @payload[:description]
+		payload = JSON.parse(request.body.read)
+		challenge[:teacher_id] = payload[:teacher_id]
+		challenge[:title] = payload[:title]
+		challenge[:description] = payload[:description]
 
 		challenge.save	
 	end

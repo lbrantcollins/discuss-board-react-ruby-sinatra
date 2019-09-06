@@ -1,5 +1,5 @@
 
-COPY users(username, password)
+COPY users(username, password, teacher)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/users.csv' DELIMITER ',' CSV HEADER;
 
 COPY teachers(teacher_id)
@@ -22,6 +22,10 @@ FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board
 
 COPY challenge_languages(challenge_id, language_id)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/challenge_languages.csv' DELIMITER ',' CSV HEADER;
+
+##############################################################
+############## THERE ARE NO CSV FILES FOR BELOW  ...YET
+##############################################################
 
 COPY questions(challenge_id, student_id, question, substantial)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/questions.csv' DELIMITER ',' CSV HEADER;

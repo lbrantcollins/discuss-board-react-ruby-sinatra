@@ -41,22 +41,23 @@ class KeywordController < ApplicationController
 	# React will provide the form
 
 	# UPDATE/put: update/modify an existing keyword 
+	# NOT USING THIS ROUTE: CAN ONLY ADD OR DELETE
 	###########
 	# NOTE: This will change the keyword on ALL past posts too
 	# Probably should warn the user about that
 	put '/:id' do
 		keyword = Keyword.find params[:id]
 
-		JSON.parse(request.body.read)
-		keyword[:keyword] = payload[:keyword]
+		payload = JSON.parse(request.body.read)
+		keyword[:keyword] = payload["keyword"]
 
 		keyword.save
 		[200, keyword.to_json]
 	end
 
-	# DELETE/destroy keyword(s) from an array of ids 
+	# DELETE/destroy keyword(s) when given an array of keyword ids 
 	###########
-	# NOTE: This SHOULD remove keyword(s) from ALL challenges too
+	# NOTE: This removes keyword(s) from ALL challenges too
 	# That is, also removed from challenge-keyword thru table
 	# Probably should warn the user about that!!
 	delete '/' do
@@ -69,7 +70,7 @@ class KeywordController < ApplicationController
 
 	# DELETE/destroy a keyword 
 	###########
-	# NOTE: This SHOULD remove the keyword from ALL past posts too
+	# NOTE: This removes the keyword from ALL past posts too
 	# Probably should warn the user about that
 	delete '/:id' do
 		keyword = Keyword.find params[:id]

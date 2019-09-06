@@ -1,24 +1,21 @@
 require 'json'
 
-# languages associated with a specific challenge
+# list of languages teachers can associate with challenges
 
 class LanguageController < ApplicationController
 
 	get '/test' do
-		"you hit the /languages/test route"
+		"you have reached the /languages/test route"
 	end
 
-	# return alphabetical list of all available languages
+	# INDEX/get list of all available languages
+	########### 
 	get '/' do
-		language_entries = Language.all
-		languages = []
-		language_entries.map do |entry|
-			languages.push(entry.language)
-		end
-		return (languages.sort).to_json
+		languages = Language.all
+		[200, languages.to_json]
 	end
 
-	# NEW/get form to add a language 
+	# NEW/get form to add a language to the list of available languages
 	###########
 	get '/new' do
 		"you hit the /languages/new route"
@@ -26,68 +23,59 @@ class LanguageController < ApplicationController
 		# needing to be prompted by this route
 	end
 
-	# INDEX/get all languages for a specific challenge (alphabetically)
+	# SHOW/get: not needed
 	###########
-	get '/:challenge_id' do
-		language_entries = ChallengeLanguage.where(challenge_id: params[:challenge_id])
-		languages = []
-		language_entries.map do |entry|
-			languages.push(entry.language)
-		end
-		return (languages.sort).to_json
+
+	# CREATE/post: add a language to the list of available languages
+	###########
+	post '/' do
+		payload = JSON.parse(request.body.read)
+		language = Language.create({
+			language: payload["language"]
+		})
+		[201, language.to_json]
 	end
 	
-	# SHOW/get one language from a challenge
+	# EDIT/get form change an existing language 
 	###########
-	# NOTE: NOT LIKELY TO NEED THIS ROUTE
-	get '/:challenge_id/:language_id' do
-		language = ChallengeLanguage.where(
-			challenge_id: params[:challenge_id],			
-			language_id: params[:language_id]
-		)
-		return language.to_json
+	# React will provide the form
+
+	# UPDATE/put: update/modify an existing language 
+	# NOT USING THIS ROUTE: CAN ONLY ADD OR DELETE
+	###########
+	# NOTE: This will change the language on ALL past posts too
+	# Probably should warn the user about that
+	put '/:id' do
+		language = Language.find params[:id]
+
+		payload = JSON.parse(request.body.read)
+		language[:language] = payload["language"]
+
+		language.save
+		[200, language.to_json]
 	end
 
-	# CREATE/post a language to a specific challenge
+	# DELETE/destroy language(s) when given an array of language ids 
 	###########
-	post '/:challenge_id/:language_id' do
-		# do not add a language to a challenge if already associated
-		existing_languages = ChallengeLanguage.where(challenge_id: params[:challenge_id])
-		existing_language_ids = []
-		existing_languages.each do |language|
-			existing_language_ids.push(language.language_id)
-		end
-		if existing_language_ids.include?(params[:language_id].to_i)
-			# the language is already associated with this challenge
-			puts "language_id #{params[:language_id]} is already included on challenge #{params[:challenge_id]}."
-		else
-			# add the language (since NOT already associated with this challenge)
-			ChallengeLanguage.create(
-				challenge_id: params[:challenge_id], 
-				language_id: params[:language_id]
-			)
-		end
+	# NOTE: This removes language(s) from ALL challenges too
+	# That is, also removed from challenge-language thru table
+	# Probably should warn the user about that!!
+	delete '/' do
+		# payload must be an array of language table ids
+		payload = JSON.parse(request.body.read)
+		languages = Language.where(id: payload)
+		# destroy "in_batches" for batch removal from DB (efficiency)
+		languages.in_batches(of: 1000).destroy_all
 	end
 
-	# EDIT/get a language on a specific challenge
+	# DELETE/destroy a language 
 	###########
-	# NOT NEEDED (languages are edited on the language_choices table)
-
-	# UPDATE/put an updated language on a specific challenge
-	###########
-	# NOT NEEDED (languages are updated on the language_choices table)
-
-	# DELETE/destroy a specific language from a specific challenge
-	###########
-	delete '/:challenge_id/:language_id' do
-		language = ChallengeLanguage.where(
-			challenge_id: params[:challenge_id],
-			language_id: params[:language_id]
-		).first
-		
-		language.delete
+	# NOTE: This removes the language from ALL past posts too
+	# Probably should warn the user about that
+	delete '/:id' do
+		language = Language.find params[:id]
+		language.destroy
 	end
-
 
 
 end

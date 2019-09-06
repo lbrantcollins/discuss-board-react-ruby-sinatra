@@ -11,6 +11,17 @@ class ApplicationController < Sinatra::Base
 		:database => 'discuss'
 	)
 
+	# Set up CORS
+  	register Sinatra::CrossOrigin
+
+	configure do
+    	enable :cross_origin
+  	end
+
+  	set :allow_origin, :any
+  	set :allow_methods, [:get, :post, :put, :options, :patch, :delete, :head]
+  	set :allow_credentials, true
+
 	# teach controller to find templates
 	set :views, File.expand_path('../../views', __FILE__)
 
@@ -20,6 +31,14 @@ class ApplicationController < Sinatra::Base
 	# I shouldn't need method override since using fetch in React
 	# use Rack::MethodOverride # use Rack middleware
 	# set :method_override, true # turn on method override for Sinatra
+
+	# as a part of CORS, some browsers send OPTIONS requests first to check
+  	# what they're allowed to do, this is our response to that check
+  	options '*' do
+    	response.headers["Allow"] = "HEAD,GET,PUT,PATCH,POST,DELETE,OPTIONS"
+    	response.headers["Access-Control-Allow-Headers"] = "X-Requested-Wtih, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept"
+    	200
+  	end
 
 	get '/' do
 		"<h1>Welcome to your first Sinatra MVC App.</h1>"

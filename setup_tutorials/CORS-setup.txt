@@ -1,0 +1,34 @@
+#### Gemfile
+
+`gem 'sinatra-cross_origin'
+
+Then, `bundle install`
+
+#### ApplicationController.rb
+
+Just below database setup:
+
+```
+# Set up CORS
+  register Sinatra::CrossOrigin
+
+  configure do
+    enable :cross_origin
+  end
+
+  set :allow_origin, :any
+  set :allow_methods, [:get, :post, :put, :options, :patch, :delete, :head]
+  set :allow_credentials, true
+```
+
+Just below static files setup (`public`) folder:
+
+```
+# as a part of CORS, some browsers send OPTIONS requests first to check
+  # what they're allowed to do, this is our response to that check
+  options '*' do
+    response.headers["Allow"] = "HEAD,GET,PUT,PATCH,POST,DELETE,OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "X-Requested-Wtih, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept"
+    200
+  end
+```

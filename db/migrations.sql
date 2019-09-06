@@ -28,7 +28,8 @@ CREATE TABLE challenges (
 	teacher_id INT,
 	title VARCHAR(255),
 	description VARCHAR(1024),
-	FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+	FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+	date_posted TIMESTAMP NOT NULL
 );
 
 CREATE TABLE keywords (
@@ -64,7 +65,8 @@ CREATE TABLE questions (
 	question VARCHAR(1024),
 	substantial BOOLEAN,
 	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
-	FOREIGN KEY (student_id) REFERENCES students(id)
+	FOREIGN KEY (student_id) REFERENCES students(id),
+	date_posted TIMESTAMP NOT NULL
 );
 
 CREATE TABLE responses (
@@ -73,7 +75,8 @@ CREATE TABLE responses (
 	teacher_id INT,
 	response VARCHAR(1024),
 	FOREIGN KEY (question_id) REFERENCES questions(id),
-	FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+	FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+	date_posted TIMESTAMP NOT NULL
 );
 
 CREATE TABLE snippets (
@@ -85,7 +88,8 @@ CREATE TABLE snippets (
 	substantial BOOLEAN,
 	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
 	FOREIGN KEY (language_id) REFERENCES languages(id),
-	FOREIGN KEY (student_id) REFERENCES students(id)
+	FOREIGN KEY (student_id) REFERENCES students(id),
+	date_posted TIMESTAMP NOT NULL
 );
 
 CREATE TABLE comments (
@@ -95,7 +99,8 @@ CREATE TABLE comments (
 	comment VARCHAR(1024),
 	substantial BOOLEAN,
 	FOREIGN KEY (snippet_id) REFERENCES snippets(id),
-	FOREIGN KEY (student_id) REFERENCES students(id)
+	FOREIGN KEY (student_id) REFERENCES students(id),
+	date_posted TIMESTAMP NOT NULL
 );
 
 CREATE TABLE observations (
@@ -104,7 +109,8 @@ CREATE TABLE observations (
 	teacher_id INT,
 	observation VARCHAR(1024),
 	FOREIGN KEY (comment_id) REFERENCES comments(id),
-	FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+	FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+	date_posted TIMESTAMP NOT NULL
 );
 
 

@@ -60,7 +60,7 @@ class ChallengeController < ApplicationController
 		challenge[:description] = payload["description"]
 
 		challenge.save	
-		[201, challenge.to_json]
+		[200, challenge.to_json]
 	end
 
 	# DELETE/destroy: delete a challenge 

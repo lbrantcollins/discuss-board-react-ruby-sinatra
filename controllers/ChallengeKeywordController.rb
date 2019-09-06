@@ -49,7 +49,7 @@ class ChallengeKeywordController < ApplicationController
 		# this is a known bug (feature?) of the activerecord-import gem
 		# .import does not return a string (or stringified hash)
 		# So, I'll just return the status code:
-		[200, challenges.to_json]
+		[201, challenges.to_json]
 	end
 
 	# EDIT/get: not needed

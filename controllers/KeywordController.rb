@@ -33,7 +33,7 @@ class KeywordController < ApplicationController
 		keyword = Keyword.create({
 			keyword: payload["keyword"]
 		})
-		[200, keyword.to_json]
+		[201, keyword.to_json]
 	end
 	
 	# EDIT/get form change an existing keyword 
@@ -51,7 +51,7 @@ class KeywordController < ApplicationController
 		keyword[:keyword] = payload[:keyword]
 
 		keyword.save
-		[201, keyword.to_json]
+		[200, keyword.to_json]
 	end
 
 	# DELETE/destroy keyword(s) from an array of ids 

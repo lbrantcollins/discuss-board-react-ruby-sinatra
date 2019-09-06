@@ -31,9 +31,9 @@ class KeywordController < ApplicationController
 	post '/' do
 		payload = JSON.parse(request.body.read)
 		keyword = Keyword.create({
-			keyword: payload[:keyword]
+			keyword: payload["keyword"]
 		})
-		[200, keyword]
+		[200, keyword.to_json]
 	end
 	
 	# EDIT/get form change an existing keyword 
@@ -47,7 +47,7 @@ class KeywordController < ApplicationController
 	put '/:id' do
 		keyword = Keyword.find params[:id]
 
-		payload = JSON.parse(request.body.read)
+		JSON.parse(request.body.read)
 		keyword[:keyword] = payload[:keyword]
 
 		keyword.save

@@ -12,7 +12,6 @@ class KeywordController < ApplicationController
 	########### 
 	get '/' do
 		keywords = Keyword.all
-		p keywords.to_json
 		keywords.to_json
 	end
 
@@ -54,12 +53,25 @@ class KeywordController < ApplicationController
 		keyword.save
 	end
 
+	# DELETE/destroy keyword(s) from an array of ids 
+	###########
+	# NOTE: This SHOULD remove keyword(s) from ALL challenges too
+	# That is, also removed from challenge-keyword thru table
+	# Probably should warn the user about that!!
+	delete '/' do
+		# payload must be an array of keyword table ids
+		payload = JSON.parse(request.body.read)
+		keywords = Keyword.where(id: payload)
+		# destroy "in_batches" for batch removal from DB (efficiency)
+		keywords.in_batches(of: 1000).destroy_all
+	end
+
 	# DELETE/destroy a keyword 
 	###########
-	# NOTE: This will remove the keyword from ALL past posts too
+	# NOTE: This SHOULD remove the keyword from ALL past posts too
 	# Probably should warn the user about that
 	delete '/:id' do
-		keyword = ChallengeKeyword.find params[:id]
+		keyword = Keyword.find params[:id]
 		keyword.destroy
 	end
 

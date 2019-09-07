@@ -29,9 +29,9 @@ class KeywordController < ApplicationController
 	# CREATE/post: add a keyword to the list of available keywords
 	###########
 	post '/' do
-		payload = JSON.parse(request.body.read)
+		@payload = JSON.parse(request.body.read).symbolize_keys
 		keyword = Keyword.create({
-			keyword: payload["keyword"]
+			keyword: @payload[:keyword]
 		})
 		[201, keyword.to_json]
 	end
@@ -48,8 +48,8 @@ class KeywordController < ApplicationController
 	put '/:id' do
 		keyword = Keyword.find params[:id]
 
-		payload = JSON.parse(request.body.read)
-		keyword[:keyword] = payload["keyword"]
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		keyword[:keyword] = @payload[:keyword]
 
 		keyword.save
 		[200, keyword.to_json]

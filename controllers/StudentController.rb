@@ -2,15 +2,6 @@ require 'json'
 
 class StudentController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you hit the /students/test route"
 	end
@@ -19,7 +10,7 @@ class StudentController < ApplicationController
 	########### 
 	get '/' do
 		students = Student.all
-		return students.to_json
+		[200, students.to_json]
 	end
 
 	# NEW/get: not needed
@@ -32,9 +23,11 @@ class StudentController < ApplicationController
 	###########
 	# send the user as the payload (we just need their id)
 	post '/' do
-		Student.create({
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		student = Student.create({
 			student_id: @payload[:id]
 		})
+		[200, student.to_json]
 	end
 
 	# EDIT/get: not needed

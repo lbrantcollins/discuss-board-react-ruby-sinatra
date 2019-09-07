@@ -2,15 +2,6 @@ require 'json'
 
 class UserController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you hit the /users/test route"
 	end
@@ -26,6 +17,12 @@ class UserController < ApplicationController
 
 	# CREATE/post: 
 	###########
+	post '/' do
+		@payload = JSON.parse(request.body.read).symbolize_keys
+
+		201
+	end
+
 	
 
 	# EDIT/get: 

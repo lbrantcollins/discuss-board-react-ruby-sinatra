@@ -2,15 +2,6 @@ require 'json'
 
 class ObservationController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you hit the /observations/test route"
 	end
@@ -33,12 +24,13 @@ class ObservationController < ApplicationController
 	# CREATE/post: teacher will post a new observation to a COMMENT
 	###########
 	post '/' do
-		Observation.create({
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		observation = Observation.create({
 			comment_id: @payload[:comment_id],
 			teacher_id: @payload[:teacher_id],
 			observation: @payload[:observation]
 		})
-		return 201
+		[201, observation.to_json]
 	end
 	
 	# EDIT/get: 
@@ -50,11 +42,13 @@ class ObservationController < ApplicationController
 	put '/:id' do
 		observation = Observation.find params[:id]
 
+		@payload = JSON.parse(request.body.read).symbolize_keys
 		observation[:comment_id] = @payload[:comment_id]
 		observation[:teacher_id] = @payload[:teacher_id]
 		observation[:observation] = @payload[:observation]
 
 		observation.save
+		[200, observation.to_json]
 	end
 	
 	# DELETE/destroy: remove an observation to a COMMENT

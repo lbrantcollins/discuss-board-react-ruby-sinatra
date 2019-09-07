@@ -2,15 +2,6 @@ require 'json'
 
 class QuestionController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you hit the /questions/test route"
 	end
@@ -19,14 +10,14 @@ class QuestionController < ApplicationController
 	########### 
 	get '/challenge/:challenge_id' do
 		questions = Question.where(challenge_id: params[:challenge_id])
-		return [200, questions.to_json]
+		[200, questions.to_json]
 	end
 
 	# INDEX/get: list all questions by a STUDENT
 	########### 
 	get '/student/:student_id' do
 		questions = Question.where(student_id: params[:student_id])
-		return [200, questions.to_json]
+		[200, questions.to_json]
 	end
 
 	# NEW/get: 
@@ -40,13 +31,14 @@ class QuestionController < ApplicationController
 	# CREATE/post: student will post a new question
 	###########
 	post '/' do
-		Question.create({
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		question = Question.create({
 			challenge_id: @payload[:challenge_id],
 			student_id: @payload[:student_id],
 			question: @payload[:question],
 			substantial: false,
 		})
-		return 201
+		[201, question.to_json]
 	end
 	
 
@@ -59,12 +51,14 @@ class QuestionController < ApplicationController
 	put '/:id' do
 		question = Question.find params[:id]
 
+		@payload = JSON.parse(request.body.read).symbolize_keys
 		question[:challenge_id] = @payload[:challenge_id]
 		question[:student_id] = @payload[:student_id]
 		question[:question] = @payload[:question]
 		question[:substantial] = @payload[:substantial]
 
 		question.save
+		[200, question.to_json]
 	end
 	
 	# DELETE/destroy: remove a question (and associated teacher response)

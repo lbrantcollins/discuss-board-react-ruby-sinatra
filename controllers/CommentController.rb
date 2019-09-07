@@ -2,15 +2,6 @@ require 'json'
 
 class CommentController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you hit the /comments/test route"
 	end
@@ -40,13 +31,14 @@ class CommentController < ApplicationController
 	# CREATE/post: student will post a new comment
 	###########
 	post '/' do
-		Comment.create({
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		comment = Comment.create({
 			snippet_id: @payload[:snippet_id],
 			student_id: @payload[:student_id],
 			comment: @payload[:comment],
 			substantial: false,
 		})
-		return 201
+		[201, comment.to_json]
 	end
 	
 
@@ -59,12 +51,14 @@ class CommentController < ApplicationController
 	put '/:id' do
 		comment = Comment.find params[:id]
 
+		@payload = JSON.parse(request.body.read).symbolize_keys
 		comment[:snippet_id] = @payload[:snippet_id]
 		comment[:student_id] = @payload[:student_id]
 		comment[:comment] = @payload[:comment]
 		comment[:substantial] = @payload[:substantial]
 
 		comment.save
+		[200, comment.to_json]
 	end
 	
 	# DELETE/destroy: remove a comment (and associated teacher observation)

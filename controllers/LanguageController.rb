@@ -29,9 +29,9 @@ class LanguageController < ApplicationController
 	# CREATE/post: add a language to the list of available languages
 	###########
 	post '/' do
-		payload = JSON.parse(request.body.read)
+		@payload = JSON.parse(request.body.read).symbolize_keys
 		language = Language.create({
-			language: payload["language"]
+			language: @payload[:language]
 		})
 		[201, language.to_json]
 	end
@@ -48,8 +48,8 @@ class LanguageController < ApplicationController
 	put '/:id' do
 		language = Language.find params[:id]
 
-		payload = JSON.parse(request.body.read)
-		language[:language] = payload["language"]
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		language[:language] = payload[:language]
 
 		language.save
 		[200, language.to_json]

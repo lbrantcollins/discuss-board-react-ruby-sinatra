@@ -2,15 +2,6 @@ require 'json'
 
 class SnippetController < ApplicationController
 
-	before do
-		if request.post? or request.patch? or request.put? 
-			payload_body = request.body.read
-			@payload = JSON.parse(payload_body).symbolize_keys
-			puts "---------> Here's our payload: "
-			pp @payload
-		end
-	end
-
 	get '/test' do
 		"you hit the /snippets/test route"
 	end
@@ -40,14 +31,15 @@ class SnippetController < ApplicationController
 	# CREATE/post: student will post a new snippet
 	###########
 	post '/' do
-		Snippet.create({
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		snippet = Snippet.create({
 			challenge_id: @payload[:challenge_id],
 			language_id: @payload[:language_id],
 			student_id: @payload[:student_id],
 			snippet: @payload[:snippet],
 			substantial: false,
 		})
-		return 201
+		[201, snippet.to_json]
 	end
 	
 
@@ -60,6 +52,7 @@ class SnippetController < ApplicationController
 	put '/:id' do
 		snippet = Snippet.find params[:id]
 
+		@payload = JSON.parse(request.body.read).symbolize_keys
 		snippet[:challenge_id] = @payload[:challenge_id]
 		snippet[:language_id] = @payload[:language_id]
 		snippet[:student_id] = @payload[:student_id]
@@ -67,6 +60,7 @@ class SnippetController < ApplicationController
 		snippet[:substantial] = @payload[:substantial]
 
 		snippet.save
+		[200, snippet.to_json]
 	end
 	
 	# DELETE/destroy: remove a snippet from a CHALLENGE

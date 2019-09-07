@@ -25,11 +25,11 @@ class ChallengeController < ApplicationController
 	# CREATE/post: add a new challenge
 	###########
 	post '/' do
-		payload = JSON.parse(request.body.read)
+		@payload = JSON.parse(request.body.read).symbolize_keys
 		challenge = Challenge.create({
-			teacher_id: payload[:teacher_id],
-			title: payload[:title],
-			description: payload[:description],
+			teacher_id: @payload[:teacher_id],
+			title: @payload[:title],
+			description: @payload[:description],
 		})
 		[201, challenge.to_json]
 	end
@@ -54,10 +54,10 @@ class ChallengeController < ApplicationController
 	put '/:id' do
 		challenge = Challenge.find params[:id]
 
-		payload = JSON.parse(request.body.read)
-		challenge[:teacher_id] = payload["teacher_id"]
-		challenge[:title] = payload["title"]
-		challenge[:description] = payload["description"]
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		challenge[:teacher_id] = @payload[:teacher_id]
+		challenge[:title] = @payload[:title]
+		challenge[:description] = @payload[:description]
 
 		challenge.save	
 		[200, challenge.to_json]

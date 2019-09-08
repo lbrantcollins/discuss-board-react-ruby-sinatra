@@ -27,7 +27,7 @@ class LanguageController < ApplicationController
 	###########
 	get '/:id' do
 		language = Language.find params[:id]
-		return [200, language.to_json]
+		[200, language.to_json]
 	end
 
 	# CREATE/post: add a language to the list of available languages

@@ -8,14 +8,14 @@ class QuestionController < ApplicationController
 
 	# INDEX/get: list all questions for a CHALLENGE
 	########### 
-	get '/challenge/:challenge_id' do
+	get '/questions/:challenge_id' do
 		questions = Question.where(challenge_id: params[:challenge_id])
 		[200, questions.to_json]
 	end
 
 	# INDEX/get: list all questions by a STUDENT
 	########### 
-	get '/student/:student_id' do
+	get '/questions/:student_id' do
 		questions = Question.where(student_id: params[:student_id])
 		[200, questions.to_json]
 	end
@@ -24,9 +24,12 @@ class QuestionController < ApplicationController
 	###########
 	# React will provide an "add question" button
 	
-	# SHOW/get: 
+	# SHOW/get: get one question by id
 	###########
-	# not needed
+	get '/questions/:id' do
+		question = Question.find params[:id]
+		[200, question.to_json]
+	end
 
 	# CREATE/post: student will post a new question
 	###########

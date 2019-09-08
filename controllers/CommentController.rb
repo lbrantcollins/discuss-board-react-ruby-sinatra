@@ -6,6 +6,13 @@ class CommentController < ApplicationController
 		"you hit the /comments/test route"
 	end
 
+	# INDEX/get: list all comments (not needed)
+	########### 
+	get '/' do
+		comments = Comment.all
+		return [200, comments.to_json]
+	end
+
 	# INDEX/get: list all comments for a SNIPPET
 	########### 
 	get '/snippet/:snippet_id' do
@@ -24,9 +31,13 @@ class CommentController < ApplicationController
 	###########
 	# React will provide an "add comment" button
 	
-	# SHOW/get: 
+	# SHOW/get: get one coment by id
 	###########
-	# not needed
+	get '/:id' do
+		p "--------------> you hit the right comments route <------------"
+		comment = Comment.find params[:id]
+		[200, comment.to_json]
+	end
 
 	# CREATE/post: student will post a new comment
 	###########

@@ -10,7 +10,7 @@ class TeacherController < ApplicationController
 	########### 
 	get '/' do
 		teachers = Teacher.all
-		[200, ]teachers.to_json]
+		[200, teachers.to_json]
 	end
 
 	# NEW/get: not needed

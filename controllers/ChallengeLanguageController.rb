@@ -8,7 +8,7 @@ class ChallengeLanguageController < ApplicationController
 		"you hit the /challengelanguages/test route"
 	end
 
-	# INDEX/get: show all languages for a specific challenge
+	# INDEX/get: all languages for a specific challenge
 	###########
 	get '/:challenge_id' do
 		languages = ChallengeLanguage.where(challenge_id: params[:challenge_id])

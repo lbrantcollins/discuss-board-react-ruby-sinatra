@@ -8,14 +8,14 @@ class SnippetController < ApplicationController
 
 	# INDEX/get: list the only snippet for a CHALLENGE
 	########### 
-	get '/challenge/:challenge_id' do
+	get '/challenges/:challenge_id' do
 		snippet = Snippet.where(challenge_id: params[:challenge_id])
 		return [200, snippet.to_json]
 	end
 
 	# INDEX/get: list all snippets by a STUDENT
 	########### 
-	get '/student/:student_id' do
+	get '/students/:student_id' do
 		snippets = Snippet.where(student_id: params[:student_id])
 		return [200, snippets.to_json]
 	end
@@ -24,9 +24,12 @@ class SnippetController < ApplicationController
 	###########
 	# React will provide an "add snippet" button
 	
-	# SHOW/get: 
+	# SHOW/get: Get one snippet by id
 	###########
-	# not needed
+	get '/:id' do
+		snippet = Snippet.find params[:id]
+		return [200, snippet.to_json]
+	end
 
 	# CREATE/post: student will post a new snippet
 	###########

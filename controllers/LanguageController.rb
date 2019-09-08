@@ -23,8 +23,12 @@ class LanguageController < ApplicationController
 		# needing to be prompted by this route
 	end
 
-	# SHOW/get: not needed
+	# SHOW/get: Get one language by id
 	###########
+	get '/:id' do
+		language = Language.find params[:id]
+		return [200, language.to_json]
+	end
 
 	# CREATE/post: add a language to the list of available languages
 	###########

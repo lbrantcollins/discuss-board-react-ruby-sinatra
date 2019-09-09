@@ -28,6 +28,13 @@ class SnippetController < ApplicationController
 	###########
 	get '/:id' do
 		snippet = Snippet.find params[:id]
+		binding.pry
+		# response = {
+		# 	snippet: snippet,
+		# 	teacher: snippet[:teacher],
+		# 	language: snippet.lan
+
+		# }
 		return [200, snippet.to_json]
 	end
 

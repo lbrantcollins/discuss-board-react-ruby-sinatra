@@ -17,15 +17,15 @@ class CommentController < ApplicationController
 	# would love to include the instructor's observation, if any
 	########### 
 	get '/snippet/:snippet_id' do
-		binding.pry
-		# comments = Comment.eager_load(:observation)
-		snippet_id = params[:snippet_id]
-		comments = Comment.find_by_sql("
-			SELECT comments.*, observations.* FROM comments 
-			LEFT OUTER JOIN observations 
-			ON observations.comment_id = comments.id
-			# WHERE comments.snippet_id = 1
-		")
+		# binding.pry
+		comments = Comment.joins(:observation).where(snippet_id = params[:snippet_id])
+		# snippet_id = params[:snippet_id]
+		# comments = Comment.find_by_sql("
+		# 	SELECT comments.*, observations.* FROM comments 
+		# 	LEFT OUTER JOIN observations 
+		# 	ON observations.comment_id = comments.id
+		# 	WHERE comments.snippet_id = 1
+		# ")
 		# comments = Comment.where(snippet_id: params[:snippet_id])
 		return [200, comments.to_json]
 	end

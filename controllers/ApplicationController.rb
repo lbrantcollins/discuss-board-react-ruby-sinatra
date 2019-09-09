@@ -69,8 +69,11 @@ class ApplicationController < Sinatra::Base
 
 	end
 
-	get '/hello' do
-		erb :hello
+	get '*' do
+		response = " Oops! That page does not exist: "
+		300.times { response += " 404"}
+		response # figure out how to set a status on this reponse
+		# in express: res.status(404).send('404 page not found')
 	end
 
 

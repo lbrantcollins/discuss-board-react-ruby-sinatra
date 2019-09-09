@@ -9,6 +9,14 @@ class UserController < ApplicationController
 	# React will show login form
 	# do the login
 	post '/login' do
+		@payload = JSON.parse(request.body.read).symbolize_keys
+		user = User.where(username: params[:username])
+
+		##########
+		# check username and password
+		##########
+
+		[200, user.to_json]
 		
 	end
 
@@ -17,6 +25,12 @@ class UserController < ApplicationController
 	# React will show a registration form
 	post '/register' do
 		@payload = JSON.parse(request.body.read).symbolize_keys
+		
+		##########
+		# check username is unique
+		# hash password
+		##########
+
 		user = User.create({
 			username: @payload[:username],
 			password: @payload[:password],

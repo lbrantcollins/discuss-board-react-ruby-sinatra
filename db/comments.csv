@@ -1,0 +1,7 @@
+snippet_id, student_id, comment, substantial
+1, 5, "comment 1", false
+1, 6, "comment 2", false
+1, 7, "comment 3", false
+2, 4, "comment 4", false
+2, 5, "comment 5", false
+3, 7, "comment 6", false

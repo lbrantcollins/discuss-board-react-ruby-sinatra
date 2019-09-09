@@ -1,0 +1,4 @@
+challenge_id, language_id, student_id, snippet, substantial
+1, 2, 4, "for (let i=0; i < n; i++) { console.log(i); }", false
+1, 1, 6, "const count = 0; for (let i=1; i <= n; i++) { count += i; }", false
+3, 3, 4, "count = 0 ", false

@@ -1,4 +1,4 @@
-teacher_id, title, description, date_posted
-1, "Addition function", "Write a function that takes two numbers as parameters (a,b) and returns their sum", 9/1/2019
-1, "Multiplication function", "Write a function that takes two numbers as parameters (a,b) and returns their product", 9/2/2019
-2, "Modulo division function", "Write a function that takes two integers as parameters (a,b) and returns the number of times that b divides into a.  There may be a remainder (b may not divide a exactly j times), but do not return the remainder.", 9/3/2019
+teacher_id, title, description
+1, "Addition function", "Write a function that takes two numbers as parameters (a,b) and returns their sum"
+1, "Multiplication function", "Write a function that takes two numbers as parameters (a,b) and returns their product"
+2, "Modulo division function", "Write a function that takes two integers as parameters (a,b) and returns the number of times that b divides into a.  There may be a remainder (b may not divide a exactly j times), but do not return the remainder."

@@ -23,6 +23,14 @@ FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board
 COPY challenge_languages(challenge_id, language_id)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/challenge_languages.csv' DELIMITER ',' CSV HEADER;
 
+COPY snippets(challenge_id, language_id, student_id, snippet, substantial)
+FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/snippets.csv' DELIMITER ',' CSV HEADER;
+
+COPY comments(snippet_id, student_id, comment, substantial)
+FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/comments.csv' DELIMITER ',' CSV HEADER;
+
+COPY observations(comment_id, teacher_id, observation)FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/observations.csv' DELIMITER ',' CSV HEADER;
+
 ##############################################################
 ############## THERE ARE NO CSV FILES FOR BELOW  ...YET
 ##############################################################
@@ -33,10 +41,3 @@ FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board
 COPY responses(question_id, teacher_id, answer)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/responses.csv' DELIMITER ',' CSV HEADER;
 
-COPY snippets(challenge_id, language_id, student_id, snippet, substantial)
-FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/snippets.csv' DELIMITER ',' CSV HEADER;
-
-COPY comments(snippet_id, student_id, comment, substantial)
-FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/comments.csv' DELIMITER ',' CSV HEADER;
-
-COPY observations(comment_id, teacher_id, observation)FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/observations.csv' DELIMITER ',' CSV HEADER;

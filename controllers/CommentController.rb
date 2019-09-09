@@ -13,10 +13,10 @@ class CommentController < ApplicationController
 		return [200, comments.to_json]
 	end
 
-	# INDEX/get: list all comments for a SNIPPET
+	# INDEX/get: list all comments for a SNIPPET (and include instructor observation, if any)
 	########### 
 	get '/snippet/:snippet_id' do
-		comments = Comment.where(snippet_id: params[:snippet_id])
+		comments = Comment.includes(:observation).where(snippet_id: params[:snippet_id])
 		return [200, comments.to_json]
 	end
 
@@ -34,7 +34,6 @@ class CommentController < ApplicationController
 	# SHOW/get: get one coment by id
 	###########
 	get '/:id' do
-		p "--------------> you hit the right comments route <------------"
 		comment = Comment.find params[:id]
 		[200, comment.to_json]
 	end

@@ -1,3 +1,4 @@
+
 DROP DATABASE IF EXISTS discuss;
 CREATE DATABASE discuss;
 
@@ -6,9 +7,9 @@ CREATE DATABASE discuss;
 
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
-	username VARCHAR(30),
-	password VARCHAR(30),
-	teacher BOOLEAN
+	username VARCHAR(32),
+	password VARCHAR(60),
+	is_teacher BOOLEAN
 );
 
 CREATE TABLE teachers (

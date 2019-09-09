@@ -1,5 +1,5 @@
 
-COPY users(username, password, teacher)
+COPY users(username, password, is_teacher)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/users.csv' DELIMITER ',' CSV HEADER;
 
 COPY teachers(user_id)

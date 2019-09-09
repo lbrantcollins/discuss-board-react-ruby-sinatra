@@ -31,6 +31,12 @@ class ChallengeController < ApplicationController
 			title: @payload[:title],
 			description: @payload[:description],
 		})
+		# can add properties to sessions as you like
+		session[:message] = {
+			success: true,
+			status: "good",
+			text: "Successfully created new challenge ##{challenge.id}"
+		}
 		[201, challenge.to_json]
 	end
 

@@ -13,22 +13,19 @@ CREATE TABLE users (
 
 CREATE TABLE teachers (
 	id SERIAL PRIMARY KEY,
-	teacher_id INT,
-	FOREIGN KEY (teacher_id) REFERENCES users(id)
+	user_id INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE students (
 	id SERIAL PRIMARY KEY,
-	student_id INT,
-	FOREIGN KEY (student_id) REFERENCES users(id)
+	user_id INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE challenges (
 	id SERIAL PRIMARY KEY,
-	teacher_id INT,
 	title VARCHAR(255),
 	description VARCHAR(1024),
-	FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+	teacher_id INTEGER REFERENCES teachers(id),
 	date_posted TIMESTAMP DEFAULT NOW()
 );
 
@@ -39,10 +36,8 @@ CREATE TABLE keywords (
 
 CREATE TABLE challenge_keywords (
 	id SERIAL PRIMARY KEY,
-	challenge_id INT,
-	keyword_id INT,
-	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
-	FOREIGN KEY (keyword_id) REFERENCES keywords(id)
+	challenge_id INTEGER REFERENCES challenges(id),
+	keyword_id INTEGER REFERENCES keywords(id)
 );
 
 CREATE TABLE languages (
@@ -52,64 +47,51 @@ CREATE TABLE languages (
 
 CREATE TABLE challenge_languages (
 	id SERIAL PRIMARY KEY,
-	challenge_id INT,
-	language_id INT,
-	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
-	FOREIGN KEY (language_id) REFERENCES languages(id)
+	challenge_id INTEGER REFERENCES challenges(id),
+	language_id INTEGER REFERENCES languages(id)
 );
 
 CREATE TABLE questions (
 	id SERIAL PRIMARY KEY,
-	challenge_id INT,
-	student_id INT,
 	question VARCHAR(1024),
 	substantial BOOLEAN,
-	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
-	FOREIGN KEY (student_id) REFERENCES students(id),
+	challenge_id INTEGER REFERENCES challenges(id),
+	student_id INTEGER REFERENCES students(id),
 	date_posted TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE responses (
 	id SERIAL PRIMARY KEY,
-	question_id INT,
-	teacher_id INT,
 	response VARCHAR(1024),
-	FOREIGN KEY (question_id) REFERENCES questions(id),
-	FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+	question_id INTEGER REFERENCES questions(id),
+	teacher_id INTEGER REFERENCES teachers(id),
 	date_posted TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE snippets (
 	id SERIAL PRIMARY KEY,
-	challenge_id INT,
-	language_id INT,
-	student_id INT,
 	snippet VARCHAR(8192),
 	substantial BOOLEAN,
-	FOREIGN KEY (challenge_id) REFERENCES challenges(id),
-	FOREIGN KEY (language_id) REFERENCES languages(id),
-	FOREIGN KEY (student_id) REFERENCES students(id),
-	date_posted DATETIME NOT NULL DEFAULT GETDATE()
+	challenge_id INTEGER REFERENCES challenges(id),
+	language_id INTEGER REFERENCES languages(id),
+	student_id INTEGER REFERENCES students(id),
+	date_posted TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE comments (
 	id SERIAL PRIMARY KEY,
-	snippet_id INT,
-	student_id INT,
 	comment VARCHAR(1024),
 	substantial BOOLEAN,
-	FOREIGN KEY (snippet_id) REFERENCES snippets(id),
-	FOREIGN KEY (student_id) REFERENCES students(id),
+	snippet_id INTEGER REFERENCES snippets(id),
+	student_id INTEGER REFERENCES students(id),
 	date_posted TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE observations (
 	id SERIAL PRIMARY KEY,
-	comment_id INT,
-	teacher_id INT,
 	observation VARCHAR(1024),
-	FOREIGN KEY (comment_id) REFERENCES comments(id),
-	FOREIGN KEY (teacher_id) REFERENCES teachers(id),
+	comment_id INTEGER REFERENCES comments(id),
+	teacher_id INTEGER REFERENCES teachers(id),
 	date_posted TIMESTAMP DEFAULT NOW()
 );
 

@@ -28,14 +28,19 @@ class SnippetController < ApplicationController
 	###########
 	get '/:id' do
 		snippet = Snippet.find params[:id]
-		binding.pry
-		# response = {
-		# 	snippet: snippet,
-		# 	teacher: snippet[:teacher],
-		# 	language: snippet.lan
-
-		# }
-		return [200, snippet.to_json]
+		# binding.pry
+		response = {
+			challenge_id: snippet.challenge_id,
+			language_id: snippet.language_id,
+			student_id: snippet.student_id,
+			snippet: snippet.snippet,
+			substantial: snippet.substantial,
+			language: snippet.language.language,
+			title: snippet.challenge.title,
+			description: snippet.challenge.description,
+			teacher: snippet.challenge.teacher.user.username,
+		}
+		return [200, response.to_json]
 	end
 
 	# CREATE/post: student will post a new snippet

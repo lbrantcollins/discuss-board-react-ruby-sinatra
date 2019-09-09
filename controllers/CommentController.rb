@@ -17,17 +17,22 @@ class CommentController < ApplicationController
 	# would love to include the instructor's observation, if any
 	########### 
 	get '/snippet/:snippet_id' do
+		comments = Comment.where(snippet_id: params[:snippet_id])
 		# binding.pry
-		comments = Comment.joins(:observation).where(snippet_id = params[:snippet_id])
-		# snippet_id = params[:snippet_id]
-		# comments = Comment.find_by_sql("
-		# 	SELECT comments.*, observations.* FROM comments 
-		# 	LEFT OUTER JOIN observations 
-		# 	ON observations.comment_id = comments.id
-		# 	WHERE comments.snippet_id = 1
-		# ")
-		# comments = Comment.where(snippet_id: params[:snippet_id])
-		return [200, comments.to_json]
+		response = comments.map do |comment|
+			{
+				id: comment.id,
+				comment: comment.comment,
+				student_id: comment.student_id,
+				comment_date: comment.date_posted,
+				observation_id: comment.observation == nil ? nil : comment.observation.id,
+				observation: comment.observation == nil ? nil : comment.observation.observation,
+				teacher_id: comment.observation == nil ? nil : comment.observation.teacher_id,
+				observation_date: comment.observation == nil ? nil : comment.observation.date_posted,
+			}		
+		end
+		p response
+		[200, response.to_json]
 	end
 
 	# INDEX/get: list all comments for a STUDENT

@@ -25,7 +25,7 @@ class StudentController < ApplicationController
 	post '/' do
 		@payload = JSON.parse(request.body.read).symbolize_keys
 		student = Student.create({
-			student_id: @payload[:id]
+			user_id: @payload[:user_id]
 		})
 		[200, student.to_json]
 	end

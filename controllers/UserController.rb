@@ -10,8 +10,8 @@ class UserController < ApplicationController
 	# do the login
 	post '/login' do
 		@payload = JSON.parse(request.body.read).symbolize_keys
-		user = User.where(username: params[:username])
-
+		user = User.where(username: @payload[:username]).first
+		# binding.pry
 		##########
 		# check username and password
 		##########

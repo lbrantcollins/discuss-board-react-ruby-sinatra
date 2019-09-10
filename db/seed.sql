@@ -8,6 +8,8 @@ FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board
 COPY students(user_id)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/students.csv' DELIMITER ',' CSV HEADER;
 
+############## DO NOT SEED USERS ABOVE (use registration route, hashed passwords)
+
 COPY challenges(teacher_id, title, description)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/challenges.csv' DELIMITER ',' CSV HEADER;
 

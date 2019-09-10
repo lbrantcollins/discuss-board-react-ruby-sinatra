@@ -7,131 +7,110 @@ class UserController < ApplicationController
 	end
 
 	# React will show login form
-	# do the login
+	# Log user in
+	#################
 	post '/login' do
 		@payload = JSON.parse(request.body.read).symbolize_keys
-		user = User.find_by username: @payload[:username]
 
+		# check if username exists
+		user = User.find_by username: @payload[:username]
+		# grab the hashed password
 		pw = @payload[:password]
 
-		# binding.pry
-		##########
 		# check username and password
-		##########
-		if user && user.authenticate(pw)
-			session[:logged_in] = true
-			session[:username] = user.username
-			session[:message] = {
+		if user && user.authenticate(pw) # bcrypt
+
+			# send back success messages and user info
+			response = {
 				success: true,
 				status: "good",
+				message: "Welcome, #{user.username}.",
+				id: user.id,
+				username: user.username,
+				is_teacher: user.is_teacher
 			}
+			[200, response.to_json]	
+
 		else
-			session[:message] = {
+			# send back "failure" message
+			response = {
 				success: false,
 				status: "bad",
 				message: "Invalid username or password."
 			}
-		end
+			[401, response.to_json]
 
-		[200, user.to_json]
-		
+		end		
 	end
 
-	# CREATE/post: 
+
+	# CREATE/post: Register a user
 	###########
 	# React will show a registration form
 	post '/register' do
 		@payload = JSON.parse(request.body.read).symbolize_keys
 		
-		# check username is unique
+		# check if username already exists
 		user = User.find_by username: @payload[:username]
 		
+		# if username not already taken...
 		if !user
 
+			# create a new user
 			user = User.new 
-
-			# if "has_secure_password" is specified in the User model
+			user.username = @payload[:username]
+			user.is_teacher = @payload[:is_teacher]
+			
+			# since "has_secure_password" is specified in the User model
 			# then, the .password setter method will automatically encrypt
 			# the password and store it in "password_digest" on the User model
-			user.username = @payload[:username]
+			
+			# So, this hashes the password, really! so simple!
 			user.password = @payload[:password]
-			user.is_teacher = @payload[:is_teacher]
-
+			
+			# save the new user to the DB
 			user.save
 
-			# user = User.create({
-			# 	username: @payload[:username],
-			# 	password: @payload[:password],
-			# 	is_teacher: @payload[:is_teacher],
-			# })
-
-			session[:logged_in] = true
-			session[:username] = user.username
-			session[:message] = {
+			# return "success" message, other session and user info
+			response = {
 				success: true,
 				status: "good",
-				message: "Welcome, #{user.username}"
+				message: "Welcome, #{user.username}.",
+				id: user.id,
+				username: user.username,
+				is_teacher: user.is_teacher
 			}
+			[200, response.to_json]	
 
 		else
-			session[:message] = {
+			# since username already exists, return "failure" message
+			response = {
 				success: false,
 				status: "bad",
 				message: "Sorry, username #{params[:username]} is already taken."
 			}
+			[401, response.to_json]
+
 		end
-
-		##########
-		# hash password
-		##########
-
-		[201, user.to_json]
 	end
 
 
 	# logout
 	get '/logout' do
+		# grab the username before destroying the session
 		username = session[:username]
 
 		session.destroy
 
+		# now use "username" variable to send personalized logout message
 		session[:message] = {
 			success: true,
 			status: "neutral",
 			message: "#{username} is now logged out."
 		}
 
+		[200, session.to_json]
+
 	end
-
-
-
-
-	# INDEX/get: 
-	########### 
-
-	# NEW/get: 
-	###########
-	
-	# SHOW/get: 
-	###########
-
-	# CREATE/post: 
-	###########
-	post '/' do
-		@payload = JSON.parse(request.body.read).symbolize_keys
-
-		201
-	end
-
-	
-
-	# EDIT/get: 
-	###########
-
-	# UPDATE/put: 
-	###########
-	
-	# DELETE/destroy: 
-	###########
 
 end

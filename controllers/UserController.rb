@@ -2,6 +2,15 @@ require 'json'
 
 class UserController < ApplicationController
 
+	before do
+		if request.post? or request.patch? or request.put? 
+			payload_body = request.body.read
+			@payload = JSON.parse(payload_body).symbolize_keys
+			puts "---------> Here's our payload: "
+			pp @payload
+		end
+	end
+
 	get '/test' do
 		"you hit the /users/test route"
 	end
@@ -10,7 +19,6 @@ class UserController < ApplicationController
 	# Log user in
 	#################
 	post '/login' do
-		@payload = JSON.parse(request.body.read).symbolize_keys
 
 		# check if username exists
 		user = User.find_by username: @payload[:username]
@@ -21,6 +29,7 @@ class UserController < ApplicationController
 		if user && user.authenticate(pw) # bcrypt
 
 			# send back success messages and user info
+			session[:logged_in] = true
 			response = {
 				success: true,
 				status: "good",
@@ -29,7 +38,7 @@ class UserController < ApplicationController
 				username: user.username,
 				is_teacher: user.is_teacher
 			}
-			[200, response.to_json]	
+			[200, response.to_json]
 
 		else
 			# send back "failure" message
@@ -39,7 +48,6 @@ class UserController < ApplicationController
 				message: "Invalid username or password."
 			}
 			[401, response.to_json]
-
 		end		
 	end
 
@@ -48,7 +56,6 @@ class UserController < ApplicationController
 	###########
 	# React will show a registration form
 	post '/register' do
-		@payload = JSON.parse(request.body.read).symbolize_keys
 		
 		# check if username already exists
 		user = User.find_by username: @payload[:username]
@@ -80,7 +87,7 @@ class UserController < ApplicationController
 				username: user.username,
 				is_teacher: user.is_teacher
 			}
-			[200, response.to_json]	
+			[200, response.to_json]
 
 		else
 			# since username already exists, return "failure" message
@@ -103,13 +110,12 @@ class UserController < ApplicationController
 		session.destroy
 
 		# now use "username" variable to send personalized logout message
-		session[:message] = {
+		response = {
 			success: true,
-			status: "neutral",
+			status: 'neutral',
 			message: "#{username} is now logged out."
 		}
-
-		[200, session.to_json]
+		[200, response.to_json]
 
 	end
 

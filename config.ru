@@ -36,59 +36,59 @@ require './models/ObservationModel'
 # top-level routing
 # specify which controllers are used when
 
-map ('/') {
+map ('/api/v1') {
 	run ApplicationController
 }
 
-map ('/users') {
+map ('/api/v1/users') {
 	run UserController
 }
 
-map ('/students') {
+map ('/api/v1/students') {
 	run StudentController
 }
 
-map ('/teachers') {
+map ('/api/v1/teachers') {
 	run TeacherController
 }
 
-map ('/challenges') {
+map ('/api/v1/challenges') {
 	run ChallengeController
 }
 
-map ('/keywords') {
+map ('/api/v1/keywords') {
 	run KeywordController
 }
 
-map ('/challengekeywords') {
+map ('/api/v1/challengekeywords') {
 	run ChallengeKeywordController
 }
 
-map ('/languages') {
+map ('/api/v1/languages') {
 	run LanguageController
 }
 
-map ('/challengelanguages') {
+map ('/api/v1/challengelanguages') {
 	run ChallengeLanguageController
 }
 
-map ('/questions') {
+map ('/api/v1/questions') {
 	run QuestionController
 }
 
-map ('/responses') {
+map ('/api/v1/responses') {
 	run ResponseController
 }
 
-map ('/snippets') {
+map ('/api/v1/snippets') {
 	run SnippetController
 }
 
-map ('/comments') {
+map ('/api/v1/comments') {
 	run CommentController
 }
 
-map ('/observations') {
+map ('/api/v1/observations') {
 	run ObservationController
 }
 

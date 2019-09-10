@@ -4,15 +4,22 @@ class ApplicationController < Sinatra::Base
 	require 'bundler'
 	Bundler.require()
 
-	# enable sessions
-	enable :sessions
+	# for production (& development), read environment config file
+	require './config/environments'
 
 	# set up our DB connection
 	# we will come back to this later for production/deployment environs
-	ActiveRecord::Base.establish_connection(
-		:adapter => 'postgresql',
-		:database => 'discuss'
-	)
+	# ActiveRecord::Base.establish_connection(
+	# 	:adapter => 'postgresql',
+	# 	:database => 'discuss'
+	# )
+
+	# enable sessions
+	enable :sessions
+
+
+	# set up to allow production environment
+
 
 	# Set up CORS
   	register Sinatra::CrossOrigin

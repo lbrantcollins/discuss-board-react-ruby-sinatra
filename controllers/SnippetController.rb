@@ -6,11 +6,11 @@ class SnippetController < ApplicationController
 		"you hit the /snippets/test route"
 	end
 
-	# INDEX/get: list the only snippet for a CHALLENGE
+	# INDEX/get: list the snippets for a CHALLENGE
 	########### 
 	get '/challenges/:challenge_id' do
-		snippet = Snippet.where(challenge_id: params[:challenge_id])
-		return [200, snippet.to_json]
+		snippets = Snippet.where(challenge_id: params[:challenge_id])
+		return [200, snippets.to_json]
 	end
 
 	# INDEX/get: list all snippets by a STUDENT

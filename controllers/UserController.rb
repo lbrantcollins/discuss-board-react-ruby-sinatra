@@ -32,23 +32,23 @@ class UserController < ApplicationController
 			session[:logged_in] = true
 			session[:username] = user.username
 			response = {
+				code: 201,
 				success: true,
 				status: "good",
 				message: "Welcome, #{user.username}.",
 				id: user.id,
 				username: user.username,
 				is_teacher: user.is_teacher
-			}
-			[200, response.to_json]
+			}.to_json
 
 		else
 			# send back "failure" message
 			response = {
+				code: 401,
 				success: false,
 				status: "bad",
 				message: "Invalid username or password."
-			}
-			[401, response.to_json]
+			}.to_json
 		end		
 	end
 
@@ -79,27 +79,27 @@ class UserController < ApplicationController
 			# save the new user to the DB
 			user.save
 
-			session[:username] = user.username
 			session[:logged_in] = true
+			session[:username] = user.username
 			# return "success" message, other session and user info
 			response = {
+				code: 200,
 				success: true,
 				status: "good",
 				message: "Welcome, #{user.username}.",
 				id: user.id,
 				username: user.username,
 				is_teacher: user.is_teacher
-			}
-			[200, response.to_json]
+			}.to_json
 
 		else
 			# since username already exists, return "failure" message
 			response = {
+				code: 401,
 				success: false,
 				status: "bad",
 				message: "Sorry, username #{params[:username]} is already taken."
-			}
-			[401, response.to_json]
+			}.to_json
 
 		end
 	end

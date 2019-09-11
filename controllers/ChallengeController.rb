@@ -32,7 +32,7 @@ class ChallengeController < ApplicationController
 	get '/' do
 		# get all items from DB
 		challenges = Challenge.all
-		binding.pry
+		# binding.pry
 
 		# grab an array of the languages assoc with each challenge
 		challenge_langs = challenges.map do |challenge|
@@ -66,6 +66,7 @@ class ChallengeController < ApplicationController
 
 		response = challenges.each_with_index.map do |challenge, i|
 			{
+				code: 200,
 				id: challenge.id,
 				title: challenge.title,
 				description: challenge.description,
@@ -113,7 +114,7 @@ class ChallengeController < ApplicationController
 	get '/:id' do
 		challenge = Challenge.find params[:id]
 
-		binding.pry
+		# binding.pry
 
 		# respond with status and the located challenge
 		response = {
@@ -121,7 +122,10 @@ class ChallengeController < ApplicationController
 			success: true,
 			status: "good",
 			message: "Successfully retrieved challenge ##{challenge.id}",
-			challenge: challenge,
+			id: challenge.id,
+			title: challenge.title,
+			description: challenge.description,
+			teacher_id: challenge.teacher_id,
 		}
 		response.to_json
 	end

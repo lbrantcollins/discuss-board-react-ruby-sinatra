@@ -2,6 +2,27 @@ require 'json'
 
 class ChallengeController < ApplicationController
 
+	before do
+		# @payload: instantiated variable for request.body data
+		if request.post? or request.patch? or request.put? 
+			payload_body = request.body.read
+			@payload = JSON.parse(payload_body).symbolize_keys
+			puts "---------> Here's our payload: "
+			pp @payload
+		end
+
+		# only logged-in users can get to any of these routes
+		# if !session[:logged_in]
+	 #      halt 403, {
+	 #        success: false,
+	 #        status: 'bad',
+	 #        code: 403, # forbidden
+	 #        message: "You are not logged in"
+	 #      }.to_json
+  #   	end
+	end
+
+
 	get '/test' do
 		"you hit the /challenges/test route"
 	end
@@ -11,8 +32,54 @@ class ChallengeController < ApplicationController
 	get '/' do
 		# get all items from DB
 		challenges = Challenge.all
-		return challenges.to_json
+		binding.pry
+
+		# grab an array of the languages assoc with each challenge
+		challenge_langs = challenges.map do |challenge|
+			language_hashes = challenge.languages
+			langs = []
+			language_hashes.map do |language_hash|
+				langs.push(language_hash.language)
+			end
+			langs
+		end
+
+		# grab an array of the keywords assoc with each challenge
+		challenge_words = challenges.map do |challenge|
+			keyword_hashes = challenge.keywords
+			words = []
+			keyword_hashes.map do |keyword_hash|
+				words.push(keyword_hash.keyword)
+			end
+			words
+		end
+
+		# grab an array of the snippet (ids only) assoc with each challenge
+		challenge_snip_ids = challenges.map do |challenge|
+			snippet_hashes = challenge.snippets
+			snippet_ids = []
+			snippet_hashes.map do |snippet_hash|
+				snippet_ids.push(snippet_hash.id)
+			end
+			snippet_ids
+		end
+
+		response = challenges.each_with_index.map do |challenge, i|
+			{
+				id: challenge.id,
+				title: challenge.title,
+				description: challenge.description,
+				teacher_id: challenge.teacher_id,
+				date_posted: challenge.date_posted,
+				languagues: challenge_langs[i],
+				keywords: challenge_words[i],
+				snippet_ids: challenge_snip_ids[i]
+			}		
+		end
+
+		response.to_json
 	end
+
 
 	# NEW/get: show form to add a new challenge
 	###########
@@ -25,26 +92,38 @@ class ChallengeController < ApplicationController
 	# CREATE/post: add a new challenge
 	###########
 	post '/' do
-		@payload = JSON.parse(request.body.read).symbolize_keys
 		challenge = Challenge.create({
 			teacher_id: @payload[:teacher_id],
 			title: @payload[:title],
 			description: @payload[:description],
 		})
-		# can add properties to sessions as you like
-		session[:message] = {
+		# respond with status and the new challenge
+		response = {
+			code: 201,
 			success: true,
 			status: "good",
-			text: "Successfully created new challenge ##{challenge.id}"
+			message: "Successfully created new challenge ##{challenge.id}",
+			challenge: challenge,
 		}
-		[201, challenge.to_json]
+		response.to_json
 	end
 
 	# SHOW/get: show one challenge
 	###########
 	get '/:id' do
 		challenge = Challenge.find params[:id]
-		[200, challenge.to_json]
+
+		binding.pry
+
+		# respond with status and the located challenge
+		response = {
+			code: 201,
+			success: true,
+			status: "good",
+			message: "Successfully retrieved challenge ##{challenge.id}",
+			challenge: challenge,
+		}
+		response.to_json
 	end
 
    # EDIT/get: show form to edit an existing challenge
@@ -60,23 +139,41 @@ class ChallengeController < ApplicationController
 	put '/:id' do
 		challenge = Challenge.find params[:id]
 
-		@payload = JSON.parse(request.body.read).symbolize_keys
 		challenge[:teacher_id] = @payload[:teacher_id]
 		challenge[:title] = @payload[:title]
 		challenge[:description] = @payload[:description]
 
 		challenge.save	
-		[200, challenge.to_json]
+
+		# respond with status and the updated challenge
+		response = {
+			code: 200,
+			success: true,
+			status: "good",
+			message: "Successfully updated challenge ##{challenge.id}",
+			challenge: challenge,
+		}
+		response.to_json
 	end
 
 	# DELETE/destroy: delete a challenge 
-	###########
-#?????????????????????????????????????????????????????????????????????????
+	###############################
 	# this deletes all associated questions, snippets, comments, observations
+	###############################
 	delete '/:id' do
 		challenge = Challenge.find params[:id]
-		# does this delete the associated Qs, snippets, comments, observations?
+
 		challenge.destroy
+
+		# respond with status and the deleted challenge
+		response = {
+			code: 200,
+			success: true,
+			status: "neutral",
+			message: "Successfully deleted challenge ##{params[:id]}",
+			challenge: challenge,
+		}
+		response.to_json
 	end
 
 	# find all KEYWORDS and LANGUAGES for a challenge

@@ -54,37 +54,12 @@ class ApplicationController < Sinatra::Base
 		"<h1>Welcome to your first Sinatra MVC App.</h1>"
 	end
 
-	# here is why "pry" is amazing
-	get '/test' do
-
-		some_text = "Grow food. It'll change your life."
-
-		# pry gem lets us use this command
-
-		binding.pry
-
-		# this pauses execution and opens a REPL
-		# in the scope of this route at this exact spot in the code
-		# inspect variables
-		# test DB/ORM queries !!!!
-		# etc.
-		# be sure to type "exit" on terminal to resume execution back
-		# because the client is still waiting for response from this route
-
-		# CAUTION: Don't use "rerun bundle exec rackup" with "pry"
-		# (just use "bundle exec rackup")
-
-		# this response will be sent to client after you exit "pry"
-		"pry is finished -- here's some_text: #{some_text}"
-
-	end
-
-	get '*' do
-		response = " Oops! That page does not exist: "
-		300.times { response += " 404"}
-		response # figure out how to set a status on this reponse
-		# in express: res.status(404).send('404 page not found')
-	end
+	# get '*' do
+	# 	response = " Oops! That page does not exist: "
+	# 	300.times { response += " 404"}
+	# 	response # figure out how to set a status on this reponse
+	# 	# in express: res.status(404).send('404 page not found')
+	# end
 
 
 end

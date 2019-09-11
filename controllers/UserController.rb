@@ -30,6 +30,7 @@ class UserController < ApplicationController
 
 			# send back success messages and user info
 			session[:logged_in] = true
+			session[:username] = user.username
 			response = {
 				success: true,
 				status: "good",
@@ -78,6 +79,8 @@ class UserController < ApplicationController
 			# save the new user to the DB
 			user.save
 
+			session[:username] = user.username
+			session[:logged_in] = true
 			# return "success" message, other session and user info
 			response = {
 				success: true,

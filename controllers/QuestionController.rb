@@ -1,6 +1,21 @@
 require 'json'
 
+
+
 class QuestionController < ApplicationController
+
+	before do
+
+    	if !session[:logged_in]
+	      halt 403, {
+	        success: false,
+	        status: 'bad',
+	        code: 403, # forbidden
+	        message: "You are not logged in"
+	      }.to_json
+    	end
+
+	end
 
 	get '/test' do
 		"you hit the /questions/test route"

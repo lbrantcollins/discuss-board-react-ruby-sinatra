@@ -12,14 +12,14 @@ class ChallengeController < ApplicationController
 		end
 
 		# only logged-in users can get to any of these routes
-		# if !session[:logged_in]
-	 #      halt 403, {
-	 #        success: false,
-	 #        status: 'bad',
-	 #        code: 403, # forbidden
-	 #        message: "You are not logged in"
-	 #      }.to_json
-  #   	end
+		if !session[:logged_in]
+	      halt 403, {
+	        success: false,
+	        status: 'bad',
+	        code: 403, # forbidden
+	        message: "You are not logged in"
+	      }.to_json
+    	end
 	end
 
 
@@ -34,49 +34,57 @@ class ChallengeController < ApplicationController
 		challenges = Challenge.all
 		# binding.pry
 
-		# grab an array of the languages assoc with each challenge
-		challenge_langs = challenges.map do |challenge|
-			language_hashes = challenge.languages
-			langs = []
-			language_hashes.map do |language_hash|
-				langs.push(language_hash.language)
-			end
-			langs
-		end
+		# # grab an array of the languages assoc with each challenge
+		# challenge_langs = challenges.map do |challenge|
+		# 	language_hashes = challenge.languages
+		# 	langs = []
+		# 	language_hashes.map do |language_hash|
+		# 		langs.push(language_hash.language)
+		# 	end
+		# 	langs
+		# end
 
-		# grab an array of the keywords assoc with each challenge
-		challenge_words = challenges.map do |challenge|
-			keyword_hashes = challenge.keywords
-			words = []
-			keyword_hashes.map do |keyword_hash|
-				words.push(keyword_hash.keyword)
-			end
-			words
-		end
+		# # grab an array of the keywords assoc with each challenge
+		# challenge_words = challenges.map do |challenge|
+		# 	keyword_hashes = challenge.keywords
+		# 	words = []
+		# 	keyword_hashes.map do |keyword_hash|
+		# 		words.push(keyword_hash.keyword)
+		# 	end
+		# 	words
+		# end
 
-		# grab an array of the snippet (ids only) assoc with each challenge
-		challenge_snip_ids = challenges.map do |challenge|
-			snippet_hashes = challenge.snippets
-			snippet_ids = []
-			snippet_hashes.map do |snippet_hash|
-				snippet_ids.push(snippet_hash.id)
-			end
-			snippet_ids
-		end
+		# # grab an array of the snippet (ids only) assoc with each challenge
+		# challenge_snip_ids = challenges.map do |challenge|
+		# 	snippet_hashes = challenge.snippets
+		# 	snippet_ids = []
+		# 	snippet_hashes.map do |snippet_hash|
+		# 		snippet_ids.push(snippet_hash.id)
+		# 	end
+		# 	snippet_ids
+		# end
 
-		response = challenges.each_with_index.map do |challenge, i|
-			{
+		# response = challenges.each_with_index.map do |challenge, i|
+		# 	{
+
+		# 		id: challenge.id,
+		# 		title: challenge.title,
+		# 		description: challenge.description,
+		# 		teacher_id: challenge.teacher_id,
+		# 		date_posted: challenge.date_posted,
+		# 		languagues: challenge_langs[i],
+		# 		keywords: challenge_words[i],
+		# 		snippet_ids: challenge_snip_ids[i]
+		# 	}		
+		# end
+
+		response = {
 				code: 200,
-				id: challenge.id,
-				title: challenge.title,
-				description: challenge.description,
-				teacher_id: challenge.teacher_id,
-				date_posted: challenge.date_posted,
-				languagues: challenge_langs[i],
-				keywords: challenge_words[i],
-				snippet_ids: challenge_snip_ids[i]
-			}		
-		end
+				success: true,
+				status: "good",
+				message: "list of challenges successfully returned",
+				challenges: challenges
+		}
 
 		response.to_json
 	end

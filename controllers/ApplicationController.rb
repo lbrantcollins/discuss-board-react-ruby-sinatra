@@ -51,9 +51,9 @@ class ApplicationController < Sinatra::Base
     	200
   	end
 
-	get '/' do
-		"<h1>Welcome to your first Sinatra MVC App.</h1>"
-	end
+	# get '/' do
+	# 	"<h1>Welcome to your first Sinatra MVC App.</h1>"
+	# end
 
 	# get '*' do
 	# 	response = " Oops! That page does not exist: "

@@ -15,9 +15,9 @@ class UserController < ApplicationController
 		"you hit the /users/test route"
 	end
 
-	# React will show login form
 	# Log user in
 	#################
+	# React will show login form
 	post '/login' do
 
 		# check if username exists
@@ -28,11 +28,12 @@ class UserController < ApplicationController
 		# check username and password
 		if user && user.authenticate(pw) # bcrypt
 
-			# send back success messages and user info
+			# send back messages and user info
 			session[:logged_in] = true
 			session[:username] = user.username
+
 			response = {
-				code: 201,
+				code: 200,
 				success: true,
 				status: "good",
 				message: "Welcome, #{user.username}.",
@@ -51,6 +52,7 @@ class UserController < ApplicationController
 			}.to_json
 		end		
 	end
+
 
 
 	# CREATE/post: Register a user
@@ -83,7 +85,7 @@ class UserController < ApplicationController
 			session[:username] = user.username
 			# return "success" message, other session and user info
 			response = {
-				code: 200,
+				code: 201,
 				success: true,
 				status: "good",
 				message: "Welcome, #{user.username}.",

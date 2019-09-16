@@ -8,7 +8,8 @@ class ApplicationController < Sinatra::Base
 	require './config/environments'
 
 	# set up our DB connection
-	# we will come back to this later for production/deployment environs
+	# this was used during development
+	# for production (and development), we now use config file above
 	# ActiveRecord::Base.establish_connection(
 	# 	:adapter => 'postgresql',
 	# 	:database => 'discuss'
@@ -50,9 +51,9 @@ class ApplicationController < Sinatra::Base
     	200
   	end
 
-	get '/' do
-		"<h1>Welcome to your first Sinatra MVC App.</h1>"
-	end
+	# get '/' do
+	# 	"<h1>Welcome to your first Sinatra MVC App.</h1>"
+	# end
 
 	# get '*' do
 	# 	response = " Oops! That page does not exist: "

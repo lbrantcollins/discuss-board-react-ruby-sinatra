@@ -2,15 +2,42 @@ require 'json'
 
 class SnippetController < ApplicationController
 
+	before do
+		# @payload: instantiated variable for request.body data
+		if request.post? or request.patch? or request.put? 
+			payload_body = request.body.read
+			@payload = JSON.parse(payload_body).symbolize_keys
+			puts "---------> Here's our payload: "
+			pp @payload
+		end
+
+		# only logged-in users can get to any of these routes
+		if !session[:logged_in]
+	      halt 403, {
+	        success: false,
+	        status: 'bad',
+	        code: 403, # forbidden
+	        message: "You are not logged in"
+	      }.to_json
+    	end
+	end
+
 	get '/test' do
 		"you hit the /snippets/test route"
 	end
 
 	# INDEX/get: list the snippets for a CHALLENGE
 	########### 
-	get '/challenges/:challenge_id' do
+	get '/challenge/:challenge_id' do
 		snippets = Snippet.where(challenge_id: params[:challenge_id])
-		return [200, snippets.to_json]
+		response = {
+				code: 200,
+				success: true,
+				status: "good",
+				message: "list of snippets successfully returned",
+				snippets: snippets
+		}
+		return response.to_json
 	end
 
 	# INDEX/get: list all snippets by a STUDENT

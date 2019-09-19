@@ -32,6 +32,8 @@ class UserController < ApplicationController
 			session[:logged_in] = true
 			session[:username] = user.username
 
+			p session
+
 			response = {
 				code: 200,
 				success: true,

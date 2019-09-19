@@ -12,14 +12,14 @@ class ChallengeController < ApplicationController
 		end
 
 		# only logged-in users can get to any of these routes
-		if !session[:logged_in]
-	      halt 403, {
-	        success: false,
-	        status: 'bad',
-	        code: 403, # forbidden
-	        message: "You are not logged in"
-	      }.to_json
-    	end
+		# if !session[:logged_in]
+	 #      halt 403, {
+	 #        success: false,
+	 #        status: 'bad',
+	 #        code: 403, # forbidden
+	 #        message: "You are not logged in"
+	 #      }.to_json
+  #   	end
 	end
 
 

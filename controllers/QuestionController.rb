@@ -13,6 +13,9 @@ class QuestionController < ApplicationController
 			pp @payload
 		end
 
+		puts "logged in inside QuestionController?"
+		p session[:logged_in]
+		
 		# only logged-in users can get to any of these routes
 		if !session[:logged_in]
 	      halt 403, {
@@ -51,7 +54,7 @@ class QuestionController < ApplicationController
 				success: true,
 				status: "good",
 				message: "list of questions (and responses) successfully returned",
-				questions: questions
+				remarks: questions
 		}
 		return response.to_json
 	end

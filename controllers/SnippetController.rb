@@ -11,6 +11,9 @@ class SnippetController < ApplicationController
 			pp @payload
 		end
 
+		puts "logged in inside SnippetController?"
+		p session[:logged_in]
+
 		# only logged-in users can get to any of these routes
 		if !session[:logged_in]
 	      halt 403, {

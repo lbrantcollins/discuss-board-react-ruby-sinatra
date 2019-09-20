@@ -42,6 +42,7 @@ class QuestionController < ApplicationController
 				remark_id: comment.id,
 				remark: question.question,
 				student_id: question.student_id,
+				substantial: question.substantial,
 				remark_date: question.date_posted,
 				response_id: question.response == nil ? nil : question.response.id,
 				response: question.response == nil ? nil : question.response.observation,
@@ -54,7 +55,7 @@ class QuestionController < ApplicationController
 				success: true,
 				status: "good",
 				message: "list of questions (and responses) successfully returned",
-				remarks: questions
+				questions: questions
 		}
 		return response.to_json
 	end

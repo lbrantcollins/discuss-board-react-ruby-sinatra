@@ -25,6 +25,7 @@ class CommentController < ApplicationController
 				remark_id: comment.id,
 				remark: comment.comment,
 				student_id: comment.student_id,
+				substantial: comment.substantial,
 				remark_date: comment.date_posted,
 				response_id: comment.observation == nil ? nil : comment.observation.id,
 				response: comment.observation == nil ? nil : comment.observation.observation,
@@ -37,7 +38,7 @@ class CommentController < ApplicationController
 			success: true,
 			status: "good",
 			message: "list of comments (and observations) successfully returned",
-			remarks: comments
+			comments: comments
 		}
 		return response.to_json
 	end

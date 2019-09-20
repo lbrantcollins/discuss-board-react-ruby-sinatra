@@ -76,7 +76,6 @@ class SnippetController < ApplicationController
 	# CREATE/post: student will post a new snippet
 	###########
 	post '/' do
-		@payload = JSON.parse(request.body.read).symbolize_keys
 		snippet = Snippet.create({
 			challenge_id: @payload[:challenge_id],
 			language_id: @payload[:language_id],
@@ -95,16 +94,16 @@ class SnippetController < ApplicationController
 	# UPDATE/put: update/modify a snippet
 	###########
 	put '/:id' do
+		puts "ready to find the snippet"
 		snippet = Snippet.find params[:id]
+		puts " found the snippet"
 
-		@payload = JSON.parse(request.body.read).symbolize_keys
-		snippet[:challenge_id] = @payload[:challenge_id]
-		snippet[:language_id] = @payload[:language_id]
-		snippet[:student_id] = @payload[:student_id]
 		snippet[:snippet] = @payload[:snippet]
-		snippet[:substantial] = @payload[:substantial]
+		puts "updated the snippet"
 
 		snippet.save
+		puts "saved the snippet"
+
 		[200, snippet.to_json]
 	end
 	

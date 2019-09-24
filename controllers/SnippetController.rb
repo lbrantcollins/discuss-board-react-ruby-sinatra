@@ -32,7 +32,19 @@ class SnippetController < ApplicationController
 	# INDEX/get: list the snippets for a CHALLENGE
 	########### 
 	get '/challenge/:challenge_id' do
-		snippets = Snippet.where(challenge_id: params[:challenge_id])
+		snippetList = Snippet.where(challenge_id: params[:challenge_id])
+		# binding.pry
+		snippets = snippetList.map do |snippet|
+			{
+				id: snippet.id,
+				challenge_id: params[:challenge_id],
+				student_id: snippet.student_id,
+				snippet: snippet.snippet,
+				substantial: snippet.substantial,
+				date_posted: snippet.date_posted,
+				language: snippet.language,
+			}
+		end
 		response = {
 				code: 200,
 				success: true,
@@ -43,6 +55,7 @@ class SnippetController < ApplicationController
 		return response.to_json
 	end
 
+	
 	# INDEX/get: list all snippets by a STUDENT
 	########### 
 	get '/students/:student_id' do

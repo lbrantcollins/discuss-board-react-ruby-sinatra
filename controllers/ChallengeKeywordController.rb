@@ -43,6 +43,8 @@ class ChallengeKeywordController < ApplicationController
 		# payload must be an array of objects
 		# each with properties of challenge_id and keyword_id
 		payload = JSON.parse(request.body.read)
+		p "----- payload in ChallegeKeywordController"
+		p payload
 		# 'activerecord-import' module batch inserts to DB (efficiency)
 		challenges = ChallengeKeyword.import(payload)
 		# do NOT return the result of .import 

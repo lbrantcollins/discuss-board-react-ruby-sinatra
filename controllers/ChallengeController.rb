@@ -101,6 +101,8 @@ class ChallengeController < ApplicationController
 			title: challenge.title,
 			description: challenge.description,
 			teacher_id: challenge.teacher_id,
+			keywords: challenge.keywords,
+			languages: challenge.languages,
 		}
 		response.to_json
 	end

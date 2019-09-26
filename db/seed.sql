@@ -2,13 +2,14 @@
 COPY users(username, password, is_teacher)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/users.csv' DELIMITER ',' CSV HEADER;
 
+############## DO NOT SEED USERS ABOVE (use registration route, hashed passwords)
+############## 3 teachers, 3 students (brant, t1, t2, s1, s2, s3, s4): password=username
+
 COPY teachers(user_id)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/teachers.csv' DELIMITER ',' CSV HEADER;
 
 COPY students(user_id)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/students.csv' DELIMITER ',' CSV HEADER;
-
-############## DO NOT SEED USERS ABOVE (use registration route, hashed passwords)
 
 COPY challenges(teacher_id, title, description)
 FROM '/Users/linda/Documents/Learning/GeneralAssembly/SEI/capstone/discuss-board-react-ruby-sinatra/db/challenges.csv' DELIMITER ',' CSV HEADER;

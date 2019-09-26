@@ -1,8 +1,8 @@
 username, password, is_teacher
 brant, brant, true
-ta1, ta1, true
-ta2, ta2, true
-std1, std1, false
-std2, std2, false
-std3, std3, false
-std4, std4, false
+t1, t1, true
+t2, t2, true
+s1, s1, false
+s2, s2, false
+s3, s3, false
+s4, s4, false

@@ -10,5 +10,4 @@ gem 'sinatra-cross_origin' # CORS
 gem 'activerecord-import' # batch-insert records into DB
 gem 'bcrypt' # password encryption
 gem 'json'
-gem 'rake'
 
